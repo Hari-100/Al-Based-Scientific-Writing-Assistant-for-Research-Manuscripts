@@ -1,0 +1,1 @@
+# Al-Based-Scientific-Writing-Assistant-for-Research-Manuscripts

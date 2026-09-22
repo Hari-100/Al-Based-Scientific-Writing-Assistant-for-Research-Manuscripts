@@ -1,0 +1,7 @@
+sentence-transformers
+faiss-cpu
+spacy
+requests
+numpy
+huggingface_hub
+streamlit

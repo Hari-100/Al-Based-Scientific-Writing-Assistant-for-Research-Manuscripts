@@ -1,0 +1,44 @@
+[
+  {
+    "citation": "Vaswani et al., 2017",
+    "status": "possible_mismatch",
+    "note": "found 'Stability of Modified-CS and LS-CS for Recursive Reconstruction of Sparse Signal Sequences' but its year does not match the citation, verify this is the right paper",
+    "title": "Stability of Modified-CS and LS-CS for Recursive Reconstruction of Sparse Signal Sequences",
+    "sentence": "Transformer based architectures have become the dominant approach for natural language processing tasks since their introduction (Vaswani et al., 2017)."
+  },
+  {
+    "sentence": "Retrieval augmented generation reduces hallucination rates by over 60 percent in scientific writing tasks.",
+    "status": "uncited_claim",
+    "suggestions": [
+      {
+        "score": 0.22237567603588104,
+        "text": "In this report, we introduce the Gemini 2.X model family: Gemini 2.5 Pro and Gemini 2.5 Flash, as well as our earlier Gemini 2.0 Flash and Flash-Lite models. Gemini 2.5 Pro is our most capable model yet, achieving SoTA performance on frontier coding and reasoning benchmarks. In addition to its incredible coding and reasoning skills, Gemini 2.5 Pro is a thinking model that excels at multimodal understanding and it is now able to process up to 3 hours of video content. Its unique combination of long context, multimodal and reasoning capabilities can be combined to unlock new agentic workflows. Gemini 2.5 Flash provides excellent reasoning abilities at a fraction of the compute and latency requirements and Gemini 2.0 Flash and Flash-Lite provide high performance at low latency and cost. Taken together, the Gemini 2.X model generation spans the full Pareto frontier of model capability vs cost, allowing users to explore the boundaries of what is possible with complex agentic problem solving.",
+        "title": "Gemini 2.5: Pushing the Frontier with Advanced Reasoning, Multimodality, Long Context, and Next Generation Agentic Capabilities",
+        "citation": "Chen, 2024"
+      },
+      {
+        "score": -0.0019296444952487946,
+        "text": "<jats:sec>\n<jats:title content-type=\"abstract-subheading\">Purpose</jats:title>\n<jats:p>The paper aims to compare and clarify the differences and between the two well-known decomposition spectral techniques; the Winer\u2013Chaos expansion (WCE) and the Winer\u2013Hermite expansion (WHE). The details of the two decompositions are outlined. The difficulties arise when using the two techniques are also mentioned along with the convergence orders. The reader can also find a collection of references to understand the two decompositions with their origins. The geometrical Brownian motion is considered as an example for an important process with exact solution for the sake of comparison. The two decompositions are found practical in analysing the SDEs. The WCE is, in general, simpler, while WHE is more efficient as it is the limit of WCE when using infinite number of random variables. The Burgers turbulence is considered as a nonlinear example and WHE is shown to be more efficient in detecting the turbulence. In general, WHE is more efficient especially in case of nonlinear and/or non-Gaussian processes.</jats:p>\n</jats:sec>\n<jats:sec>\n<jats:title content-type=\"abstract-subheading\">Design/methodology/approach</jats:title>\n<jats:p>The paper outlined the technical and literature review of the WCE and WHE techniques. Linear and nonlinear processes are compared to outline the comparison along with the convergence of both techniques.</jats:p>\n</jats:sec>\n<jats:sec>\n<jats:title content-type=\"abstract-subheading\">Findings</jats:title>\n<jats:p>The paper shows that both decompositions are practical in solving the stochastic differential equations. The WCE is found simpler and WHE is the limit when using infinite number of random variables in WCE. The WHE is more efficient especially in case of nonlinear problems.</jats:p>\n</jats:sec>\n<jats:sec>\n<jats:title content-type=\"abstract-subheading\">Research limitations/implications</jats:title>\n<jats:p>Applicable for SDEs with square integrable processes and coefficients satisfying Lipschitz conditions.</jats:p>\n</jats:sec>\n<jats:sec>\n<jats:title content-type=\"abstract-subheading\">Originality/value</jats:title>\n<jats:p>This paper fulfils a comparison required by the researchers in the stochastic analysis area. It also introduces a simple efficient technique to model the flow turbulence in the physical domain.</jats:p>\n</jats:sec>",
+        "title": "A practical comparison between the spectral techniques in solving the SDEs",
+        "citation": "Beltagy, 2019"
+      }
+    ],
+    "llm_note": null
+  },
+  {
+    "citation": "Chen, 2024",
+    "status": "weak_support",
+    "similarity": 0.15,
+    "title": "Gemini 2.5: Pushing the Frontier with Advanced Reasoning, Multimodality, Long Context, and Next Generation Agentic Capabilities",
+    "method": "embedding",
+    "sentence": "Large language models achieve perfect factual accuracy when fine tuned on domain specific corpora (Chen, 2024)."
+  },
+  {
+    "citation": "Beltagy, 2019",
+    "status": "weak_support",
+    "similarity": 0.105,
+    "title": "A practical comparison between the spectral techniques in solving the SDEs",
+    "method": "embedding",
+    "sentence": "SciBERT was pretrained on a large corpus of scientific text and improves performance on downstream scientific NLP tasks (Beltagy, 2019)."
+  }
+]

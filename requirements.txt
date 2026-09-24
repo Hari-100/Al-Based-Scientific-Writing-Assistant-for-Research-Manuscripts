@@ -5,3 +5,4 @@ requests
 numpy
 huggingface_hub
 streamlit
+python-dotenv

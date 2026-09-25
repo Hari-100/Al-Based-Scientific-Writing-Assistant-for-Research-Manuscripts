@@ -1,0 +1,3 @@
+The Transformer architecture was introduced in 2017 and demonstrated the effectiveness of self-attention for sequence transduction tasks (Vaswani et al., 2017).
+
+BERT was trained exclusively on image datasets and was designed primarily for computer vision classification tasks (Devlin et al., 2019).

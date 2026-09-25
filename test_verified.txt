@@ -1,0 +1,3 @@
+Transformers introduced a self-attention based architecture that avoids recurrence and convolution while enabling greater parallelization during training (Vaswani et al., 2017).
+
+BERT is a bidirectional Transformer-based model pretrained on large amounts of unlabeled text and can be fine-tuned for a wide range of natural language processing tasks (Devlin et al., 2019).

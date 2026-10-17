@@ -1,5 +1,7 @@
 import html
 import json
+from collections import OrderedDict
+
 import streamlit as st
 
 from citeguard.annotate import LEVELS, annotate
@@ -38,24 +40,31 @@ def set_decision(i):
     st.session_state["decisions"][i] = st.session_state[f"decision_{i}"]
 
 
-def render_finding(i, item):
+def render_finding(i, item, show_sentence=True):
     status = item["status"]
     with st.container(border=True):
-        st.markdown(f"**{i + 1}. {LEVELS.get(status, status)}**")
-        st.write(item["sentence"])
+        st.markdown(f"**{LEVELS.get(status, status)}**")
+        if item.get("citation"):
+            st.caption(f"Citation checked: {item['citation']}")
+        if show_sentence:
+            st.write(item["sentence"])
 
         if status in ("verified", "weak_support"):
             box = st.success if status == "verified" else st.warning
             box(f"Source: **{item.get('title', 'Unknown paper')}**")
+            if item.get("doi"):
+                st.caption(f"DOI: {item['doi']}")
             if item.get("reason"):
                 st.caption(f"LLM reasoning: {item['reason']}")
             elif "similarity" in item:
                 st.caption(f"Embedding similarity: {item['similarity']}")
-
+            if item.get("note"):
+                st.caption(item["note"])
         elif status in ("possible_mismatch", "unresolved", "exists_no_abstract"):
+            if item.get("title"):
+                st.caption(f"Candidate title: {item['title']}")
             box = st.warning if status == "exists_no_abstract" else st.error
             box(item.get("note", ""))
-
         elif status == "uncited_claim":
             st.warning("Factual or empirical claim without a citation.")
             if item.get("llm_note"):
@@ -63,10 +72,11 @@ def render_finding(i, item):
             suggestions = item.get("suggestions", [])
             if suggestions:
                 with st.expander(f"Potential sources ({len(suggestions)})"):
-                    for s in suggestions:
-                        st.markdown(f"**{s['title']}**")
-                        st.caption(f"Similarity: {s['score']:.3f}")
-                        st.write(s["text"])
+                    for source in suggestions:
+                        st.markdown(f"**{source.get('title', 'Untitled paper')}**")
+                        if source.get("score") is not None:
+                            st.caption(f"Similarity: {source['score']:.3f}")
+                        st.write(source.get("text", ""))
             else:
                 st.caption("No potentially relevant sources were retrieved.")
 
@@ -82,8 +92,6 @@ def render_finding(i, item):
         )
 
 
-# ---------- Header ----------
-
 st.title("📚 CiteGuard")
 st.caption("AI-powered scientific citation and claim verification assistant")
 
@@ -92,31 +100,34 @@ with col1:
     if llm_available():
         st.success("🟢 LLM configured")
     else:
-        st.warning("🟡 LLM unavailable (set GROQ_API_KEY), using embedding fallback")
+        st.warning("🟡 LLM unavailable, using embedding fallback")
 with col2:
     st.success("🟢 RAG enabled")
 with col3:
     st.success("🟢 Citation verification enabled")
 
 st.divider()
-
-# ---------- Manuscript input ----------
-
 st.subheader("Manuscript")
 
 if "manuscript" not in st.session_state:
-    with open("sample_manuscript.txt", encoding="utf-8") as f:
-        st.session_state["manuscript"] = f.read()
+    try:
+        with open("sample_manuscript.txt", encoding="utf-8") as file:
+            st.session_state["manuscript"] = file.read()
+    except OSError:
+        st.session_state["manuscript"] = ""
 
-uploaded = st.file_uploader("Upload a manuscript (.txt, .docx or .pdf)", type=["txt", "docx", "pdf"])
+uploaded = st.file_uploader(
+    "Upload a manuscript (.txt, .docx or .pdf)",
+    type=["txt", "docx", "pdf"],
+)
 if uploaded is not None:
     file_key = (uploaded.name, uploaded.size)
     if st.session_state.get("loaded_file") != file_key:
         try:
             st.session_state["manuscript"] = load_text(uploaded.name, uploaded.getvalue())
             st.session_state["loaded_file"] = file_key
-        except Exception as e:
-            st.error(f"Could not read this file: {e}")
+        except Exception as exc:
+            st.error(f"Could not read this file: {exc}")
 
 text = st.text_area("Manuscript text", key="manuscript", height=250, label_visibility="collapsed")
 
@@ -124,15 +135,13 @@ if st.button("🔍 Run CiteGuard", type="primary"):
     if not text.strip():
         st.warning("Please enter or upload a manuscript first.")
     else:
-        with st.spinner("Analyzing manuscript and verifying citations..."):
+        with st.spinner("Searching scholarly metadata and checking citation support..."):
             report = run_pipeline(text)
             st.session_state["report"] = report
             st.session_state["annotated"] = annotate(parse_manuscript(text), report)
             st.session_state["decisions"] = {}
-        for k in [k for k in st.session_state if k.startswith("decision_")]:
-            del st.session_state[k]
-
-# ---------- Results ----------
+        for key in [key for key in st.session_state if key.startswith("decision_")]:
+            del st.session_state[key]
 
 report = st.session_state.get("report")
 if report is None:
@@ -145,7 +154,7 @@ decisions = st.session_state["decisions"]
 counts = {}
 for item in report:
     counts[item["status"]] = counts.get(item["status"], 0) + 1
-reviewed = sum(1 for d in decisions.values() if d != "Pending")
+reviewed = sum(1 for decision in decisions.values() if decision != "Pending")
 
 st.divider()
 st.subheader("Verification Summary")
@@ -165,23 +174,33 @@ with tab_text:
         for s in ("verified", "weak_support", "possible_mismatch", "unresolved")
     )
     st.markdown(legend, unsafe_allow_html=True)
-    body = "".join(sentence_html(a) for a in st.session_state["annotated"])
+    body = "".join(sentence_html(item) for item in st.session_state["annotated"])
     st.markdown(f"<div style='line-height:2.1'>{body}</div>", unsafe_allow_html=True)
-    st.caption("Sentences with no citation and no checkable claim are left unmarked.")
+    st.caption("The same sentence may contain several citations; each citation is shown once in Findings & review.")
 
 with tab_findings:
     view = st.radio("Show", ["Needs attention", "All findings"], horizontal=True)
-    shown = 0
-    for i, item in enumerate(report):
+    grouped = OrderedDict()
+    for index, item in enumerate(report):
         if view == "Needs attention" and item["status"] == "verified":
             continue
-        render_finding(i, item)
-        shown += 1
-    if shown == 0:
+        grouped.setdefault(item.get("sentence", ""), []).append((index, item))
+
+    if not grouped:
         st.success("Nothing needs attention.")
+    else:
+        for sentence, rows in grouped.items():
+            with st.container(border=True):
+                st.markdown(f"**Sentence with {len(rows)} finding(s)**")
+                st.write(sentence)
+                for index, item in rows:
+                    render_finding(index, item, show_sentence=False)
 
 with tab_export:
-    export = [{**item, "review_decision": decisions.get(i, "Pending")} for i, item in enumerate(report)]
+    export = [
+        {**item, "review_decision": decisions.get(index, "Pending")}
+        for index, item in enumerate(report)
+    ]
     st.download_button(
         "⬇️ Download JSON Report",
         data=json.dumps(export, indent=2, ensure_ascii=False),

@@ -1,72 +1,86 @@
+"""Verify citations after conservative metadata resolution."""
+
 import numpy as np
+
 from citeguard.citation_apis import resolve_citation
 from citeguard.embeddings import embed
 from citeguard.llm import llm_available, judge_support
 
-SUPPORT_THRESHOLD = 0.35  # used only when the llm is unavailable
+SUPPORT_THRESHOLD = 0.35
 
 
-def verify_citation(sentence, citation_text, store):
-    paper = resolve_citation(citation_text, sentence)
+def verify_citation(sentence, citation_text, store, citation_context=None):
+    # Resolve from the nearby model/claim context, but judge support against the
+    # complete sentence so the verdict is based on the full authored claim.
+    paper = resolve_citation(citation_text, citation_context or sentence)
 
     if paper is None:
         return {
             "citation": citation_text,
             "status": "unresolved",
-            "note": "no matching paper found in Semantic Scholar, CrossRef, or arXiv, possible fabricated citation",
+            "note": "No sufficiently reliable scholarly match was found. Check the author-year citation or provide a full paper title.",
         }
 
-    if not paper["abstract"]:
+    base = {
+        "citation": citation_text,
+        "title": paper.get("title", "Unknown title"),
+        "year": paper.get("year"),
+        "source": paper.get("source"),
+        "sources": paper.get("sources", []),
+        "doi": paper.get("doi"),
+        "url": paper.get("url"),
+        "context_score": paper.get("context_score"),
+    }
+
+    abstract = (paper.get("abstract") or "").strip()
+    if not abstract:
         return {
-            "citation": citation_text,
+            **base,
             "status": "exists_no_abstract",
-            "note": "paper found but no abstract available to check support",
-            "title": paper["title"],
+            "note": "A contextually plausible paper record was found, but metadata providers did not supply an abstract. Citation identity is not the same as claim verification.",
         }
 
-    if not (paper.get("year_match", True) and paper.get("surname_match", True)):
-        store.add(paper["abstract"], {"title": paper["title"], "citation": citation_text})
-        return {
-            "citation": citation_text,
-            "status": "possible_mismatch",
-            "note": f"found '{paper['title']}' but its author or year does not match the citation, verify this is the right paper",
-            "title": paper["title"],
-        }
+    store.add(abstract, {"title": paper.get("title", ""), "citation": citation_text})
 
-    # cache the retrieved paper so claim verification can search it later
-    store.add(paper["abstract"], {"title": paper["title"], "citation": citation_text})
-
-    # llm judges support first, embedding similarity is the fallback if it is unavailable
     if llm_available():
-        verdict = judge_support(sentence, paper["abstract"])
-        if verdict["supported"] is not None:
-            status = "verified" if verdict["supported"] else "weak_support"
+        verdict = judge_support(sentence, abstract)
+        if verdict and verdict.get("supported") is not None:
             return {
-                "citation": citation_text,
-                "status": status,
-                "reason": verdict["reason"],
-                "title": paper["title"],
+                **base,
+                "status": "verified" if verdict["supported"] else "weak_support",
+                "reason": verdict.get("reason", ""),
                 "method": "llm",
             }
 
+    # Graceful local fallback when the LLM is not configured or returns no verdict.
     sent_vec = embed([sentence])[0]
-    abs_vec = embed([paper["abstract"]])[0]
+    abs_vec = embed([abstract])[0]
     similarity = float(np.dot(sent_vec, abs_vec))
-    status = "verified" if similarity >= SUPPORT_THRESHOLD else "weak_support"
     return {
-        "citation": citation_text,
-        "status": status,
+        **base,
+        "status": "verified" if similarity >= SUPPORT_THRESHOLD else "weak_support",
         "similarity": round(similarity, 3),
-        "title": paper["title"],
         "method": "embedding",
+        "note": "Embedding similarity is a fallback signal, not proof of factual support.",
     }
 
 
 def verify_all(parsed_sentences, store):
     results = []
     for item in parsed_sentences:
-        for citation in item["citations"]:
-            result = verify_citation(item["sentence"], citation, store)
+        # Use citation-local context to disambiguate lists such as GPT (Radford),
+        # BERT (Devlin), and RoBERTa (Liu) within the same sentence.
+        context_by_citation = {
+            record.get("citation", "").casefold(): record.get("context", "")
+            for record in item.get("citation_contexts", [])
+        }
+        for citation in item.get("citations", []):
+            result = verify_citation(
+                item["sentence"],
+                citation,
+                store,
+                citation_context=context_by_citation.get(citation.casefold()),
+            )
             result["sentence"] = item["sentence"]
             results.append(result)
     return results

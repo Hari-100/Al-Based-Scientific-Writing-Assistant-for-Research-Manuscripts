@@ -2,28 +2,46 @@
   {
     "sentence": "Retrieval augmented generation reduces hallucination rates by over 60 percent in scientific writing tasks.",
     "status": "uncited_claim",
-    "suggestions": [],
-    "llm_note": null
-  },
-  {
-    "citation": "Vaswani et al., 2017",
-    "status": "exists_no_abstract",
-    "note": "paper found but no abstract available to check support",
-    "title": "Figure 4: Transformer architecture (Vaswani, 2017).",
-    "sentence": "Transformer based architectures have become the dominant approach for natural language processing tasks since their introduction (Vaswani et al., 2017)."
+    "suggestions": [
+      {
+        "score": 0.03314024209976196,
+        "text": "Patients with both diabetes and coronavirus disease 2019 (COVID-19) are more likely to experience negative outcomes. This study aimed to identify the risk factors associated with these adverse outcomes that can assist clinicians in implementing suitable treatment strategies to minimize the occurrence of severe complications. A total of 92 patients with diabetes and COVID-19 in the Endocrine Department of Zhejiang Provincial Hospital of Chinese Medicine from December 2022 to February 2023 were enrolled and divided into the recovered group and the transfer to the intensive care unit (ICU) or death group. The clinical characteristics and infection indicators were compared between the 2 groups. Additionally, the patients were further divided into the normal group and the reduction group based on their glomerular filtration rate (GFR), and their clinical characteristics and infection indicators were also analyzed. Compared with the GFR normal group, the GFR reduction group exhibited worse outcomes, higher COVID-19 severity, a higher proportion of mechanical ventilation, and a longer hospital stay. However, there were no significant differences in leukocyte, lymphocyte, and neutrophil counts between these 2 groups. Compared with the recovered group, the transfer to ICU or death group demonstrated an increase in leukocytes and neutrophils, while lymphocytes decreased ( P < .05). The C-reactive protein, procalcitonin, interleukin-6, and serum amyloid A levels in the transfer to ICU or death group were significantly higher than those in the Recovered group ( P < .05). In addition, C-reactive protein, procalcitonin, and serum amyloid A levels in the GFR reduction group were significantly higher than those in the normal group ( P < .05), while interleukin-6 levels were only slightly higher ( P > .05). In clinical treatment, it is necessary to monitor infection indicators and GFR closely and intervene in time to reduce the occurrence of adverse events.",
+        "title": "Clinical characteristics of diabetes patients complicated with COVID-19",
+        "citation": "Chen, 2024"
+      },
+      {
+        "score": -0.05893302336335182,
+        "text": "Purpose The paper aims to compare and clarify the differences and between the two well-known decomposition spectral techniques; the Winer\u2013Chaos expansion (WCE) and the Winer\u2013Hermite expansion (WHE). The details of the two decompositions are outlined. The difficulties arise when using the two techniques are also mentioned along with the convergence orders. The reader can also find a collection of references to understand the two decompositions with their origins. The geometrical Brownian motion is considered as an example for an important process with exact solution for the sake of comparison. The two decompositions are found practical in analysing the SDEs. The WCE is, in general, simpler, while WHE is more efficient as it is the limit of WCE when using infinite number of random variables. The Burgers turbulence is considered as a nonlinear example and WHE is shown to be more efficient in detecting the turbulence. In general, WHE is more efficient especially in case of nonlinear and/or non-Gaussian processes. Design/methodology/approach The paper outlined the technical and literature review of the WCE and WHE techniques. Linear and nonlinear processes are compared to outline the comparison along with the convergence of both techniques. Findings The paper shows that both decompositions are practical in solving the stochastic differential equations. The WCE is found simpler and WHE is the limit when using infinite number of random variables in WCE. The WHE is more efficient especially in case of nonlinear problems. Research limitations/implications Applicable for SDEs with square integrable processes and coefficients satisfying Lipschitz conditions. Originality/value This paper fulfils a comparison required by the researchers in the stochastic analysis area. It also introduces a simple efficient technique to model the flow turbulence in the physical domain.",
+        "title": "A practical comparison between the spectral techniques in solving the SDEs",
+        "citation": "Beltagy, 2019"
+      }
+    ],
+    "llm_note": "LLM suggestion unavailable: GROQ_API_KEY is not configured in this process."
   },
   {
     "citation": "Chen, 2024",
-    "status": "exists_no_abstract",
-    "note": "paper found but no abstract available to check support",
-    "title": "Unveiling Factual Recall Behaviors of Large Language Models through Knowledge Neurons",
+    "status": "weak_support",
+    "similarity": 0.044,
+    "title": "Clinical characteristics of diabetes patients complicated with COVID-19",
+    "method": "embedding",
+    "source": "crossref",
     "sentence": "Large language models achieve perfect factual accuracy when fine tuned on domain specific corpora (Chen, 2024)."
   },
   {
     "citation": "Beltagy, 2019",
-    "status": "exists_no_abstract",
-    "note": "paper found but no abstract available to check support",
-    "title": "SciBERT: A Pretrained Language Model for Scientific Text",
+    "status": "weak_support",
+    "similarity": 0.06,
+    "title": "A practical comparison between the spectral techniques in solving the SDEs",
+    "method": "embedding",
+    "source": "crossref",
     "sentence": "SciBERT was pretrained on a large corpus of scientific text and improves performance on downstream scientific NLP tasks (Beltagy, 2019)."
+  },
+  {
+    "citation": "Vaswani et al., 2017",
+    "status": "exists_no_abstract",
+    "title": "A rewarding introduction to global bioethics",
+    "note": "A plausible paper record was found, but the available providers did not supply an abstract for support checking.",
+    "source": "crossref",
+    "sentence": "Transformer based architectures have become the dominant approach for natural language processing tasks since their introduction (Vaswani et al., 2017)."
   }
 ]

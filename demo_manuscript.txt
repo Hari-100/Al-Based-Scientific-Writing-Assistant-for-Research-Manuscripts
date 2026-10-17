@@ -1,0 +1,20 @@
+Transformers use self-attention to model relationships between tokens and support parallel sequence processing (Vaswani et al., 2017).
+BERT introduced bidirectional pretraining for language representations and can be fine-tuned for downstream NLP tasks (Devlin et al., 2019).
+RoBERTa showed that BERT's pretraining setup was not fully optimized and studied the effects of training data, batch size, and training duration (Liu et al., 2019).
+SciBERT was pretrained on scientific publications to improve language representations for scientific text (Beltagy et al., 2019).
+Retrieval-augmented generation combines a sequence generator with retrieved documents to support knowledge-intensive natural language tasks (Lewis et al., 2020).
+The GPT-3 study evaluated few-shot learning, where a language model performs new tasks from a small number of examples in the prompt (Brown et al., 2020).
+The T5 study framed many NLP problems as text-to-text tasks so that a single model format could be reused across tasks (Raffel et al., 2020).
+XLNet combined ideas from autoregressive language modeling and permutation-based training to learn contextual representations (Yang et al., 2019).
+ELECTRA trained a discriminator to identify replaced tokens, offering an alternative pretraining objective to masked language modeling (Clark et al., 2020).
+DeBERTa disentangled content and position information in its attention mechanism and introduced an enhanced mask decoder (He et al., 2021).
+The Vision Transformer applied a Transformer encoder to sequences of image patches for image recognition (Dosovitskiy et al., 2021).
+Residual learning made it possible to train substantially deeper neural networks by learning residual functions (He et al., 2016).
+AlexNet showed the effectiveness of a deep convolutional neural network on large-scale image classification (Krizhevsky et al., 2012).
+Adam uses adaptive estimates of first and second moments of gradients to update model parameters (Kingma et al., 2014).
+Word2vec introduced efficient methods for learning distributed word representations from large text corpora (Mikolov et al., 2013).
+Long short-term memory networks were designed to learn dependencies over long time intervals in recurrent networks (Hochreiter and Schmidhuber, 1997).
+Generative adversarial networks train a generator and discriminator through an adversarial minimax objective (Goodfellow et al., 2014).
+Sequence-to-sequence learning used multilayer recurrent neural networks to map input sequences to output sequences (Sutskever et al., 2014).
+ELMo produced contextual word representations from deep bidirectional language models and improved transfer to downstream NLP tasks (Peters et al., 2018).
+Neural machine translation can learn soft alignments between source and target words jointly with translation (Bahdanau et al., 2015).

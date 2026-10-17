@@ -1,8 +1,19 @@
+# sentence-transformers
+# faiss-cpu
+# spacy
+# requests
+# numpy
+
+# streamlit
+# python-dotenv
+
 sentence-transformers
 faiss-cpu
 spacy
 requests
 numpy
-huggingface_hub
 streamlit
+huggingface_hub
 python-dotenv
+python-docx
+pypdf

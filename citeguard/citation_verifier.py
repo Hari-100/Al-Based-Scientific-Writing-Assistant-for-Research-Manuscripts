@@ -7,7 +7,7 @@ SUPPORT_THRESHOLD = 0.35  # used only when the llm is unavailable
 
 
 def verify_citation(sentence, citation_text, store):
-    paper = resolve_citation(citation_text)
+    paper = resolve_citation(citation_text, sentence)
 
     if paper is None:
         return {
@@ -24,12 +24,12 @@ def verify_citation(sentence, citation_text, store):
             "title": paper["title"],
         }
 
-    if not paper.get("year_match", True):
+    if not (paper.get("year_match", True) and paper.get("surname_match", True)):
         store.add(paper["abstract"], {"title": paper["title"], "citation": citation_text})
         return {
             "citation": citation_text,
             "status": "possible_mismatch",
-            "note": f"found '{paper['title']}' but its year does not match the citation, verify this is the right paper",
+            "note": f"found '{paper['title']}' but its author or year does not match the citation, verify this is the right paper",
             "title": paper["title"],
         }
 

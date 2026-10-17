@@ -1,4 +1,5 @@
 import re
+import unicodedata
 import requests
 import xml.etree.ElementTree as ET
 from functools import lru_cache
@@ -9,10 +10,16 @@ ARXIV_URL = "http://export.arxiv.org/api/query"
 
 YEAR_PATTERN = re.compile(r"(\d{4})")
 SURNAME_PATTERN = re.compile(r"[A-Z][a-zA-Z\-]+")
+WORD_PATTERN = re.compile(r"[A-Za-z]{3,}")
+STOPWORDS = {
+    "the", "and", "for", "have", "has", "become", "since", "their", "are", "with",
+    "that", "this", "these", "those", "its", "been", "was", "were", "which", "who",
+    "based", "using", "used", "from", "into", "than", "can", "also",
+}
 
 
 def _clean_query(citation_text):
-    # "et al." and commas are noise to a search engine
+    # "et al." and commas are noise to a search engine, strip them
     cleaned = citation_text.replace("et al.", "").replace(",", " ")
     return re.sub(r"\s+", " ", cleaned).strip()
 
@@ -27,377 +34,125 @@ def _extract_surname(citation_text):
     return m.group(0) if m else None
 
 
+def _fold(text):
+    return unicodedata.normalize("NFKD", text).encode("ascii", "ignore").decode().lower()
+
+
 def _year_matches(citation_text, result_year):
     cited_year = _extract_year(citation_text)
-
     if cited_year is None or result_year is None:
-        return True
-
+        return True  # cannot check, do not penalise
     return abs(cited_year - result_year) <= 1
 
 
-def _author_matches(citation_text, authors):
-    """
-    Check whether the cited surname appears among the paper authors.
-    """
+def _surname_matches(citation_text, authors):
     surname = _extract_surname(citation_text)
-
-    if not surname or not authors:
-        return False
-
-    surname = surname.lower()
-
-    for author in authors:
-        if isinstance(author, dict):
-            name = author.get("name", "")
-        else:
-            name = str(author)
-
-        if surname in name.lower():
-            return True
-
-    return False
+    if surname is None or not authors:
+        return True  # cannot check, do not penalise
+    return any(_fold(surname) in _fold(a) for a in authors)
 
 
-def _candidate_score(citation_text, candidate):
-    """
-    Rank a paper candidate.
+def _context_words(sentence):
+    # content words of the citing sentence, minus the citation itself
+    stripped = re.sub(r"\([^)]*\)", "", sentence)
+    words = [w.lower() for w in WORD_PATTERN.findall(stripped)]
+    return list(dict.fromkeys(w for w in words if w not in STOPWORDS))
 
-    Author + year are the strongest signals because a citation such as
-    "Vaswani et al., 2017" contains very little title information.
-    """
 
-    cited_year = _extract_year(citation_text)
-
-    score = 0
-
-    # Strong signal: cited author actually appears on the paper.
-    if candidate.get("author_match"):
-        score += 100
-
-    # Strong signal: publication year matches.
-    result_year = candidate.get("year")
-
-    if cited_year is not None and result_year is not None:
-        if result_year == cited_year:
-            score += 80
-        elif abs(result_year - cited_year) == 1:
-            score += 30
-
-    # Prefer papers with abstracts because CiteGuard needs them later.
-    if candidate.get("abstract"):
-        score += 10
-
-    # Small preference for a non-empty title.
-    if candidate.get("title"):
-        score += 2
-
-    return score
+def _overlap(paper, words):
+    text = (paper["title"] + " " + paper["abstract"]).lower()
+    return sum(1 for w in words if w in text)
 
 
 def search_semantic_scholar(query, timeout=10):
-    """
-    Search Semantic Scholar and return multiple candidates.
-
-    Previously only the first result was returned, which caused unrelated
-    papers to be accepted for citations such as "Vaswani et al., 2017".
-    """
-
-    params = {
-        "query": query,
-        "limit": 10,
-        "fields": "title,abstract,year,authors",
-    }
-
+    params = {"query": query, "limit": 5, "fields": "title,abstract,year,authors"}
     try:
-        r = requests.get(
-            SEMANTIC_SCHOLAR_URL,
-            params=params,
-            timeout=timeout,
-        )
+        r = requests.get(SEMANTIC_SCHOLAR_URL, params=params, timeout=timeout)
         r.raise_for_status()
-
-        data = r.json().get("data", [])
-
-        candidates = []
-
-        for paper in data:
-            authors = paper.get("authors") or []
-
-            candidates.append({
-                "title": paper.get("title"),
-                "abstract": paper.get("abstract") or "",
-                "year": paper.get("year"),
-                "authors": authors,
-                "source": "semantic_scholar",
-            })
-
-        return candidates
-
+        return [{
+            "title": p.get("title") or "",
+            "abstract": p.get("abstract") or "",
+            "year": p.get("year"),
+            "authors": [a.get("name") or "" for a in p.get("authors") or []],
+            "source": "semantic_scholar",
+        } for p in r.json().get("data") or []]
     except (requests.RequestException, ValueError):
         return []
 
 
 def search_crossref(query, timeout=10):
-    """
-    Search CrossRef and return multiple candidates.
-    """
-
-    params = {
-        "query.bibliographic": query,
-        "rows": 10,
-    }
-
+    params = {"query.bibliographic": query, "rows": 5}
     try:
-        r = requests.get(
-            CROSSREF_URL,
-            params=params,
-            timeout=timeout,
-        )
+        r = requests.get(CROSSREF_URL, params=params, timeout=timeout)
         r.raise_for_status()
-
-        items = r.json().get("message", {}).get("items", [])
-
-        candidates = []
-
-        for item in items:
-            title_list = item.get("title", [])
-            title = title_list[0] if title_list else ""
-
-            abstract = item.get("abstract", "") or ""
-
-            date_parts = (
-                item.get("published", {})
-                .get("date-parts", [[None]])
-            )
-
-            year = date_parts[0][0] if date_parts and date_parts[0] else None
-
-            authors = item.get("author", []) or []
-
-            candidates.append({
-                "title": title,
-                "abstract": abstract,
-                "year": year,
-                "authors": authors,
+        papers = []
+        for item in r.json().get("message", {}).get("items", []):
+            parts = item.get("published", {}).get("date-parts") or [[None]]
+            papers.append({
+                "title": (item.get("title") or [""])[0],
+                "abstract": re.sub(r"<[^>]+>", "", item.get("abstract") or "").strip(),
+                "year": parts[0][0] if parts[0] else None,
+                "authors": [a.get("family") or "" for a in item.get("author", [])],
                 "source": "crossref",
             })
-
-        return candidates
-
+        return papers
     except (requests.RequestException, ValueError):
         return []
 
 
-def search_arxiv(citation_text, timeout=10):
-    """
-    Search arXiv by author surname and return several candidates.
-    """
-
-    surname = _extract_surname(citation_text)
-
-    if surname:
-        search_query = f"au:{surname}"
-    else:
-        search_query = f"all:{_clean_query(citation_text)}"
-
-    params = {
-        "search_query": search_query,
-        "start": 0,
-        "max_results": 10,
-    }
-
+def _arxiv_fetch(search_query, timeout=10):
+    params = {"search_query": search_query, "start": 0, "max_results": 10}
     try:
-        r = requests.get(
-            ARXIV_URL,
-            params=params,
-            timeout=timeout,
-        )
+        r = requests.get(ARXIV_URL, params=params, timeout=timeout)
         r.raise_for_status()
-
-        ns = {
-            "atom": "http://www.w3.org/2005/Atom"
-        }
-
-        root = ET.fromstring(r.content)
-        entries = root.findall("atom:entry", ns)
-
-        candidates = []
-
-        for entry in entries:
-            published_element = entry.find("atom:published", ns)
-            title_element = entry.find("atom:title", ns)
-            abstract_element = entry.find("atom:summary", ns)
-
-            if published_element is None:
-                continue
-
-            year = int(published_element.text[:4])
-
-            authors = []
-
-            for author_element in entry.findall("atom:author", ns):
-                name_element = author_element.find("atom:name", ns)
-
-                if name_element is not None:
-                    authors.append({
-                        "name": name_element.text
-                    })
-
-            candidates.append({
-                "title": (
-                    title_element.text.strip()
-                    if title_element is not None
-                    else ""
-                ),
-                "abstract": (
-                    abstract_element.text.strip()
-                    if abstract_element is not None
-                    else ""
-                ),
-                "year": year,
-                "authors": authors,
+        ns = {"atom": "http://www.w3.org/2005/Atom"}
+        papers = []
+        for entry in ET.fromstring(r.content).findall("atom:entry", ns):
+            papers.append({
+                "title": " ".join(entry.find("atom:title", ns).text.split()),
+                "abstract": " ".join(entry.find("atom:summary", ns).text.split()),
+                "year": int(entry.find("atom:published", ns).text[:4]),
+                "authors": [a.find("atom:name", ns).text or "" for a in entry.findall("atom:author", ns)],
                 "source": "arxiv",
             })
-
-        return candidates
-
-    except (requests.RequestException, ET.ParseError, ValueError):
+        return papers
+    except (requests.RequestException, ET.ParseError, AttributeError, ValueError):
         return []
 
 
+def search_arxiv(citation_text, context_words=()):
+    # author field search is precise, context words narrow it when one author has many papers
+    surname = _extract_surname(citation_text)
+    if not surname:
+        return []
+    if context_words:
+        terms = " AND ".join(f"all:{w}" for w in context_words)
+        papers = _arxiv_fetch(f"au:{surname} AND {terms}")
+        if papers:
+            return papers
+    return _arxiv_fetch(f"au:{surname}")
+
+
 @lru_cache(maxsize=256)
-def resolve_citation(citation_text):
-    """
-    Resolve an author-year citation across Semantic Scholar, CrossRef,
-    and arXiv.
+def resolve_citation(citation_text, sentence=""):
+    context = _context_words(sentence)
+    query = " ".join([_clean_query(citation_text)] + context[:6])
 
-    The resolver now evaluates multiple candidates instead of blindly
-    accepting the first API result.
-    """
-
-    query = _clean_query(citation_text)
-
-    all_candidates = []
-
-    # Semantic Scholar
-    semantic_candidates = search_semantic_scholar(query)
-
-    # CrossRef
-    crossref_candidates = search_crossref(query)
-
-    # arXiv
-    arxiv_candidates = search_arxiv(citation_text)
-
-    all_candidates.extend(semantic_candidates)
-    all_candidates.extend(crossref_candidates)
-    all_candidates.extend(arxiv_candidates)
-
-    if not all_candidates:
+    # pool candidates from every source, then rank them in one place
+    candidates = (
+        search_semantic_scholar(query)
+        + search_crossref(query)
+        + search_arxiv(citation_text, context[:2])
+    )
+    if not candidates:
         return None
 
-    # Add matching metadata to every candidate.
-    for candidate in all_candidates:
-        candidate["year_match"] = _year_matches(
-            citation_text,
-            candidate.get("year"),
-        )
+    for c in candidates:
+        c["year_match"] = _year_matches(citation_text, c["year"])
+        c["surname_match"] = _surname_matches(citation_text, c["authors"])
 
-        candidate["author_match"] = _author_matches(
-            citation_text,
-            candidate.get("authors"),
-        )
-
-        candidate["_score"] = _candidate_score(
-            citation_text,
-            candidate,
-        )
-
-    # ---------------------------------------------------------
-    # First preference:
-    # exact author + exact year
-    # ---------------------------------------------------------
-
-    cited_year = _extract_year(citation_text)
-
-    exact_candidates = [
-        c for c in all_candidates
-        if c.get("author_match")
-        and cited_year is not None
-        and c.get("year") == cited_year
-    ]
-
-    if exact_candidates:
-        best = max(
-            exact_candidates,
-            key=lambda c: c["_score"]
-        )
-
-        best.pop("_score", None)
-        best.pop("authors", None)
-        best.pop("author_match", None)
-
-        return best
-
-    # ---------------------------------------------------------
-    # Second preference:
-    # author + acceptable year (±1)
-    # ---------------------------------------------------------
-
-    author_year_candidates = [
-        c for c in all_candidates
-        if c.get("author_match")
-        and c.get("year_match")
-    ]
-
-    if author_year_candidates:
-        best = max(
-            author_year_candidates,
-            key=lambda c: c["_score"]
-        )
-
-        best.pop("_score", None)
-        best.pop("authors", None)
-        best.pop("author_match", None)
-
-        return best
-
-    # ---------------------------------------------------------
-    # Third preference:
-    # any matching-year candidate
-    # ---------------------------------------------------------
-
-    year_candidates = [
-        c for c in all_candidates
-        if c.get("year_match")
-    ]
-
-    if year_candidates:
-        best = max(
-            year_candidates,
-            key=lambda c: c["_score"]
-        )
-
-        best.pop("_score", None)
-        best.pop("authors", None)
-        best.pop("author_match", None)
-
-        return best
-
-    # ---------------------------------------------------------
-    # Final fallback:
-    # return the strongest candidate even though its year may
-    # not match. citation_verifier.py will mark it as
-    # possible_mismatch.
-    # ---------------------------------------------------------
-
-    best = max(
-        all_candidates,
-        key=lambda c: c["_score"]
+    # author and year must fit, then similarity to the citing sentence breaks author/year collisions
+    return max(
+        candidates,
+        key=lambda c: (c["surname_match"], c["year_match"], _overlap(c, context), bool(c["abstract"])),
     )
-
-    best.pop("_score", None)
-    best.pop("authors", None)
-    best.pop("author_match", None)
-
-    return best

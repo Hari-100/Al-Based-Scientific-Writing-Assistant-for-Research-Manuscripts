@@ -1,44 +1,29 @@
 [
   {
+    "sentence": "Retrieval augmented generation reduces hallucination rates by over 60 percent in scientific writing tasks.",
+    "status": "uncited_claim",
+    "suggestions": [],
+    "llm_note": null
+  },
+  {
     "citation": "Vaswani et al., 2017",
-    "status": "possible_mismatch",
-    "note": "found 'Stability of Modified-CS and LS-CS for Recursive Reconstruction of Sparse Signal Sequences' but its year does not match the citation, verify this is the right paper",
-    "title": "Stability of Modified-CS and LS-CS for Recursive Reconstruction of Sparse Signal Sequences",
+    "status": "exists_no_abstract",
+    "note": "paper found but no abstract available to check support",
+    "title": "Figure 4: Transformer architecture (Vaswani, 2017).",
     "sentence": "Transformer based architectures have become the dominant approach for natural language processing tasks since their introduction (Vaswani et al., 2017)."
   },
   {
-    "sentence": "Retrieval augmented generation reduces hallucination rates by over 60 percent in scientific writing tasks.",
-    "status": "uncited_claim",
-    "suggestions": [
-      {
-        "score": 0.23848006129264832,
-        "text": "Obtaining large-scale annotated data for NLP tasks in the scientific domain is challenging and expensive. We release SciBERT, a pretrained language model based on BERT (Devlin et. al., 2018) to address the lack of high-quality, large-scale labeled scientific data. SciBERT leverages unsupervised pretraining on a large multi-domain corpus of scientific publications to improve performance on downstream scientific NLP tasks. We evaluate on a suite of tasks including sequence tagging, sentence classification and dependency parsing, with datasets from a variety of scientific domains. We demonstrate statistically significant improvements over BERT and achieve new state-of-the-art results on several of these tasks. The code and pretrained models are available at https://github.com/allenai/scibert/.",
-        "title": "SciBERT: A Pretrained Language Model for Scientific Text",
-        "citation": "Beltagy, 2019"
-      },
-      {
-        "score": 0.22237567603588104,
-        "text": "In this report, we introduce the Gemini 2.X model family: Gemini 2.5 Pro and Gemini 2.5 Flash, as well as our earlier Gemini 2.0 Flash and Flash-Lite models. Gemini 2.5 Pro is our most capable model yet, achieving SoTA performance on frontier coding and reasoning benchmarks. In addition to its incredible coding and reasoning skills, Gemini 2.5 Pro is a thinking model that excels at multimodal understanding and it is now able to process up to 3 hours of video content. Its unique combination of long context, multimodal and reasoning capabilities can be combined to unlock new agentic workflows. Gemini 2.5 Flash provides excellent reasoning abilities at a fraction of the compute and latency requirements and Gemini 2.0 Flash and Flash-Lite provide high performance at low latency and cost. Taken together, the Gemini 2.X model generation spans the full Pareto frontier of model capability vs cost, allowing users to explore the boundaries of what is possible with complex agentic problem solving.",
-        "title": "Gemini 2.5: Pushing the Frontier with Advanced Reasoning, Multimodality, Long Context, and Next Generation Agentic Capabilities",
-        "citation": "Chen, 2024"
-      }
-    ],
-    "llm_note": "None of the candidate papers fit well; the first focuses on a pretrained language model for scientific text without mentioning retrieval-augmented generation or specific hallucination reduction metrics, and the second is a model family report that does not provide the specific statistical claim regarding RAG in scientific writing."
-  },
-  {
     "citation": "Chen, 2024",
-    "status": "weak_support",
-    "reason": "The abstract describes Gemini models' capabilities and performance but provides no evidence about perfect",
-    "title": "Gemini 2.5: Pushing the Frontier with Advanced Reasoning, Multimodality, Long Context, and Next Generation Agentic Capabilities",
-    "method": "llm",
+    "status": "exists_no_abstract",
+    "note": "paper found but no abstract available to check support",
+    "title": "Unveiling Factual Recall Behaviors of Large Language Models through Knowledge Neurons",
     "sentence": "Large language models achieve perfect factual accuracy when fine tuned on domain specific corpora (Chen, 2024)."
   },
   {
     "citation": "Beltagy, 2019",
-    "status": "verified",
-    "reason": "The abstract explicitly states that SciBERT was pretrained",
+    "status": "exists_no_abstract",
+    "note": "paper found but no abstract available to check support",
     "title": "SciBERT: A Pretrained Language Model for Scientific Text",
-    "method": "llm",
     "sentence": "SciBERT was pretrained on a large corpus of scientific text and improves performance on downstream scientific NLP tasks (Beltagy, 2019)."
   }
 ]

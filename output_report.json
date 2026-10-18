@@ -16,7 +16,7 @@
         "citation": "Beltagy et al., 2019"
       }
     ],
-    "llm_note": "LLM suggestion unavailable: GROQ_API_KEY is not configured in this process."
+    "llm_note": "None of the supplied candidates provide relevant support for the claim."
   },
   {
     "sentence": "Pretraining a scientific language model improves performance by at least 30% on every downstream scientific text-classification task.",
@@ -35,7 +35,7 @@
         "citation": "Hochreiter and Schmidhuber, 1997"
       }
     ],
-    "llm_note": "LLM suggestion unavailable: GROQ_API_KEY is not configured in this process."
+    "llm_note": "**Relevant source**\n\n- **Candidate 1: \u201cSciBERT: A Pretrained Language Model for Scientific Text\u201d** \u2013 The abstract states that SciBERT, a pretrained model, \u201cimproves performance on downstream scientific NLP tasks\u201d and reports statistically significant gains over BERT on a suite of tasks, directly supporting the claim that pretraining boosts performance on scientific text\u2011classification tasks.\n\n**Irrelevant source**\n\n- **Candidate 2: \u201cLong Short-Term Memory\u201d** \u2013 This paper discusses recurrent neural network architecture and training dynamics, with no mention of pretraining or performance on scientific text\u2011classification tasks."
   },
   {
     "sentence": "Generative adversarial networks always produce realistic samples once the discriminator reaches 95% accuracy.",
@@ -54,7 +54,7 @@
         "citation": "Beltagy et al., 2019"
       }
     ],
-    "llm_note": "LLM suggestion unavailable: GROQ_API_KEY is not configured in this process."
+    "llm_note": "None of the provided candidates offers reliable support for the claim that \u201cgenerative adversarial networks always produce realistic samples once the discriminator reaches 95% accuracy.\u201d The first candidate discusses LSTM architectures, and the second discusses a pretrained language model for scientific text; neither addresses GAN training dynamics or discriminator accuracy thresholds."
   },
   {
     "sentence": "LSTM networks eliminate vanishing gradients and can always learn dependencies of arbitrary length.",
@@ -73,7 +73,7 @@
         "citation": "Beltagy et al., 2019"
       }
     ],
-    "llm_note": "LLM suggestion unavailable: GROQ_API_KEY is not configured in this process."
+    "llm_note": "**Relevant source**\n\n- **Candidate 1: \u201cLong Short\u2011Term Memory\u201d** \u2013 The abstract explicitly discusses how LSTM units \u201cenforce constant error flow through constant error carousels\u201d to address the vanishing\u2011gradient problem and states that LSTM can learn to bridge minimal time lags in excess of 1000 discrete\u2011time steps, i.e., dependencies of arbitrary length. This directly supports the claim that LSTM networks eliminate vanishing gradients and can learn long\u2011range dependencies.\n\n**Irrelevant source**\n\n- **Candidate 2: \u201cSciBERT: A Pretrained Language Model for Scientific Text\u201d** \u2013 This paper focuses on a BERT\u2011based language model for scientific NLP tasks and does not address LSTM networks, vanishing gradients, or sequence\u2011length learning."
   },
   {
     "sentence": "Using a larger embedding dimension improves semantic retrieval accuracy on every dataset and for every query type.",
@@ -92,7 +92,7 @@
         "citation": "Hochreiter and Schmidhuber, 1997"
       }
     ],
-    "llm_note": "LLM suggestion unavailable: GROQ_API_KEY is not configured in this process."
+    "llm_note": "None of the supplied candidates provide adequate support for the claim that increasing the embedding dimension improves semantic retrieval accuracy on every dataset and for every query type."
   },
   {
     "sentence": "Combining a pretrained language model with retrieved documents reduces factual errors by 80% in every application.",
@@ -111,7 +111,7 @@
         "citation": "Hochreiter and Schmidhuber, 1997"
       }
     ],
-    "llm_note": "LLM suggestion unavailable: GROQ_API_KEY is not configured in this process."
+    "llm_note": "None of the supplied candidates provides adequate support for the claim. Candidate\u202f1 discusses a pretrained language model for scientific text but does not address retrieval or factual error reduction. Candidate\u202f2 describes an LSTM architecture and likewise offers no evidence related to combining pretrained models with retrieved documents or error rates."
   },
   {
     "sentence": "The proposed evidence-retrieval module always returns the correct supporting passage, even when the document collection contains contradictory sources.",
@@ -130,7 +130,7 @@
         "citation": "Goodfellow et al., 2014"
       }
     ],
-    "llm_note": "LLM suggestion unavailable: GROQ_API_KEY is not configured in this process."
+    "llm_note": "None of the supplied candidates provides adequate support for the claim that the evidence\u2011retrieval module always returns the correct supporting passage even when the document collection contains contradictory sources."
   },
   {
     "citation": "Goodfellow et al., 2014",
@@ -144,9 +144,8 @@
     "url": "https://doi.org/10.3402/rlt.v21.21366",
     "context_score": 0.2,
     "status": "weak_support",
-    "similarity": -0.038,
-    "method": "embedding",
-    "note": "Embedding similarity is a fallback signal, not proof of factual support.",
+    "reason": "The abstract discusses digital scholarship and openness, with no mention of generative adversarial networks or adversarial learning.",
+    "method": "llm",
     "sentence": "Generative adversarial networks train a generator and discriminator in opposition through an adversarial learning objective (Goodfellow et al., 2014)."
   },
   {
@@ -176,9 +175,8 @@
     "url": "https://doi.org/10.1162/neco.1997.9.8.1735",
     "context_score": 0.545,
     "status": "verified",
-    "similarity": 0.682,
-    "method": "embedding",
-    "note": "Embedding similarity is a fallback signal, not proof of factual support.",
+    "reason": "The abstract explicitly states that LSTM employs multiplicative gate units to control information flow, demonstrating its gated mechanism for managing temporal dependencies.",
+    "method": "llm",
     "sentence": "Long short-term memory networks use gated mechanisms to manage information and learn temporal dependencies in recurrent neural networks (Hochreiter and Schmidhuber, 1997)."
   },
   {
@@ -193,9 +191,8 @@
     "url": "https://doi.org/10.18653/v1/d19-1371",
     "context_score": 0.556,
     "status": "verified",
-    "similarity": 0.603,
-    "method": "embedding",
-    "note": "Embedding similarity is a fallback signal, not proof of factual support.",
+    "reason": "The abstract states that SciBERT was pretrained on a large corpus of scientific publications and that this pretraining improves performance on downstream scientific NLP tasks.",
+    "method": "llm",
     "sentence": "SciBERT was pretrained on scientific publications to improve language representations for scientific text-processing tasks (Beltagy et al., 2019)."
   }
 ]

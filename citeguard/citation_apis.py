@@ -14,6 +14,7 @@ false matches such as an unrelated 2017 Crossref record being selected for
 import html
 import os
 import re
+from concurrent.futures import ThreadPoolExecutor
 import unicodedata
 from functools import lru_cache
 
@@ -414,6 +415,42 @@ def resolve_citation(citation_text, sentence=""):
     if reliable:
         best = max(reliable, key=lambda c: (bool(c.get("abstract")), c["_score"]))
         return _public_result(best)
+
+    # ADDITIVE FALLBACK: only runs when the existing contextual search found
+    # no reliable match. Keep the normal search/ranking path above unchanged.
+    # A long combined query can bury canonical papers, so retry once using only
+    # the cited first-author surname and year. Providers run concurrently to
+    # avoid tripling fallback latency. Results must pass the SAME reliability
+    # checks; this does not relax the acceptance threshold.
+    cited_year = _year(citation_text)
+    short_query = " ".join(part for part in (surname, str(cited_year or "")) if part).strip()
+    if short_query and short_query.casefold() != query.casefold():
+        fallback_candidates = []
+        with ThreadPoolExecutor(max_workers=3) as executor:
+            futures = [
+                executor.submit(_search_openalex, short_query),
+                executor.submit(_search_openaire, short_query),
+                executor.submit(_search_crossref, short_query, surname),
+            ]
+            for future in futures:
+                try:
+                    fallback_candidates.extend(future.result(timeout=TIMEOUT + 1))
+                except Exception:
+                    # One unavailable provider must not prevent the others
+                    # from returning useful metadata.
+                    continue
+
+        fallback_pool = _dedupe_candidates(candidates + fallback_candidates)
+        fallback_ranked = [
+            _candidate_signals(candidate.copy(), citation_text, context_tokens)
+            for candidate in fallback_pool
+        ]
+        fallback_reliable = [candidate for candidate in fallback_ranked if _reliable(candidate)]
+        if fallback_reliable:
+            with_abstract = [candidate for candidate in fallback_reliable if candidate.get("abstract")]
+            pool = with_abstract or fallback_reliable
+            best = max(pool, key=lambda candidate: candidate["_score"])
+            return _public_result(best)
 
     return None
 

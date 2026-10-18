@@ -1,47 +1,201 @@
 [
   {
-    "sentence": "Retrieval augmented generation reduces hallucination rates by over 60 percent in scientific writing tasks.",
+    "sentence": "The Adam optimizer always achieves lower validation loss than stochastic gradient descent, regardless of architecture, dataset, or learning-rate schedule.",
     "status": "uncited_claim",
     "suggestions": [
       {
-        "score": 0.03314024209976196,
-        "text": "Patients with both diabetes and coronavirus disease 2019 (COVID-19) are more likely to experience negative outcomes. This study aimed to identify the risk factors associated with these adverse outcomes that can assist clinicians in implementing suitable treatment strategies to minimize the occurrence of severe complications. A total of 92 patients with diabetes and COVID-19 in the Endocrine Department of Zhejiang Provincial Hospital of Chinese Medicine from December 2022 to February 2023 were enrolled and divided into the recovered group and the transfer to the intensive care unit (ICU) or death group. The clinical characteristics and infection indicators were compared between the 2 groups. Additionally, the patients were further divided into the normal group and the reduction group based on their glomerular filtration rate (GFR), and their clinical characteristics and infection indicators were also analyzed. Compared with the GFR normal group, the GFR reduction group exhibited worse outcomes, higher COVID-19 severity, a higher proportion of mechanical ventilation, and a longer hospital stay. However, there were no significant differences in leukocyte, lymphocyte, and neutrophil counts between these 2 groups. Compared with the recovered group, the transfer to ICU or death group demonstrated an increase in leukocytes and neutrophils, while lymphocytes decreased ( P < .05). The C-reactive protein, procalcitonin, interleukin-6, and serum amyloid A levels in the transfer to ICU or death group were significantly higher than those in the Recovered group ( P < .05). In addition, C-reactive protein, procalcitonin, and serum amyloid A levels in the GFR reduction group were significantly higher than those in the normal group ( P < .05), while interleukin-6 levels were only slightly higher ( P > .05). In clinical treatment, it is necessary to monitor infection indicators and GFR closely and intervene in time to reduce the occurrence of adverse events.",
-        "title": "Clinical characteristics of diabetes patients complicated with COVID-19",
-        "citation": "Chen, 2024"
+        "score": 0.3055303394794464,
+        "text": "Learning to store information over extended time intervals by recurrent backpropagation takes a very long time, mostly because of insufficient, decaying error backflow. We briefly review Hochreiter's (1991) analysis of this problem, then address it by introducing a novel, efficient, gradient based method called long short-term memory (LSTM). Truncating the gradient where this does not do harm, LSTM can learn to bridge minimal time lags in excess of 1000 discrete-time steps by enforcing constant error flow through constant error carousels within special units. Multiplicative gate units learn to open and close access to the constant error flow. LSTM is local in space and time; its computational complexity per time step and weight is O. 1. Our experiments with artificial data involve local, distributed, real-valued, and noisy pattern representations. In comparisons with real-time recurrent learning, back propagation through time, recurrent cascade correlation, Elman nets, and neural sequence chunking, LSTM leads to many more successful runs, and learns much faster. LSTM also solves complex, artificial long-time-lag tasks that have never been solved by previous recurrent network algorithms.",
+        "title": "Long Short-Term Memory",
+        "citation": "Hochreiter and Schmidhuber, 1997"
       },
       {
-        "score": -0.05893302336335182,
-        "text": "Purpose The paper aims to compare and clarify the differences and between the two well-known decomposition spectral techniques; the Winer\u2013Chaos expansion (WCE) and the Winer\u2013Hermite expansion (WHE). The details of the two decompositions are outlined. The difficulties arise when using the two techniques are also mentioned along with the convergence orders. The reader can also find a collection of references to understand the two decompositions with their origins. The geometrical Brownian motion is considered as an example for an important process with exact solution for the sake of comparison. The two decompositions are found practical in analysing the SDEs. The WCE is, in general, simpler, while WHE is more efficient as it is the limit of WCE when using infinite number of random variables. The Burgers turbulence is considered as a nonlinear example and WHE is shown to be more efficient in detecting the turbulence. In general, WHE is more efficient especially in case of nonlinear and/or non-Gaussian processes. Design/methodology/approach The paper outlined the technical and literature review of the WCE and WHE techniques. Linear and nonlinear processes are compared to outline the comparison along with the convergence of both techniques. Findings The paper shows that both decompositions are practical in solving the stochastic differential equations. The WCE is found simpler and WHE is the limit when using infinite number of random variables in WCE. The WHE is more efficient especially in case of nonlinear problems. Research limitations/implications Applicable for SDEs with square integrable processes and coefficients satisfying Lipschitz conditions. Originality/value This paper fulfils a comparison required by the researchers in the stochastic analysis area. It also introduces a simple efficient technique to model the flow turbulence in the physical domain.",
-        "title": "A practical comparison between the spectral techniques in solving the SDEs",
-        "citation": "Beltagy, 2019"
+        "score": 0.17949804663658142,
+        "text": "Obtaining large-scale annotated data for NLP tasks in the scientific domain is challenging and expensive. We release SciBERT, a pretrained language model based on BERT (Devlin et al., 2018) to address the lack of high-quality, large-scale labeled scientific data. SciBERT leverages unsupervised pretraining on a large multi-domain corpus of scientific publications to improve performance on downstream scientific NLP tasks. We evaluate on a suite of tasks including sequence tagging, sentence classification and dependency parsing, with datasets from a variety of scientific domains. We demonstrate statistically significant improvements over BERT and achieve new state-of-the-art results on several of these tasks. The code and pretrained models are available at https://github.com/allenai/scibert/.",
+        "title": "SciBERT: A Pretrained Language Model for Scientific Text",
+        "citation": "Beltagy et al., 2019"
       }
     ],
     "llm_note": "LLM suggestion unavailable: GROQ_API_KEY is not configured in this process."
   },
   {
-    "citation": "Chen, 2024",
-    "status": "weak_support",
-    "similarity": 0.044,
-    "title": "Clinical characteristics of diabetes patients complicated with COVID-19",
-    "method": "embedding",
-    "source": "crossref",
-    "sentence": "Large language models achieve perfect factual accuracy when fine tuned on domain specific corpora (Chen, 2024)."
+    "sentence": "Pretraining a scientific language model improves performance by at least 30% on every downstream scientific text-classification task.",
+    "status": "uncited_claim",
+    "suggestions": [
+      {
+        "score": 0.6340447664260864,
+        "text": "Obtaining large-scale annotated data for NLP tasks in the scientific domain is challenging and expensive. We release SciBERT, a pretrained language model based on BERT (Devlin et al., 2018) to address the lack of high-quality, large-scale labeled scientific data. SciBERT leverages unsupervised pretraining on a large multi-domain corpus of scientific publications to improve performance on downstream scientific NLP tasks. We evaluate on a suite of tasks including sequence tagging, sentence classification and dependency parsing, with datasets from a variety of scientific domains. We demonstrate statistically significant improvements over BERT and achieve new state-of-the-art results on several of these tasks. The code and pretrained models are available at https://github.com/allenai/scibert/.",
+        "title": "SciBERT: A Pretrained Language Model for Scientific Text",
+        "citation": "Beltagy et al., 2019"
+      },
+      {
+        "score": 0.22041350603103638,
+        "text": "Learning to store information over extended time intervals by recurrent backpropagation takes a very long time, mostly because of insufficient, decaying error backflow. We briefly review Hochreiter's (1991) analysis of this problem, then address it by introducing a novel, efficient, gradient based method called long short-term memory (LSTM). Truncating the gradient where this does not do harm, LSTM can learn to bridge minimal time lags in excess of 1000 discrete-time steps by enforcing constant error flow through constant error carousels within special units. Multiplicative gate units learn to open and close access to the constant error flow. LSTM is local in space and time; its computational complexity per time step and weight is O. 1. Our experiments with artificial data involve local, distributed, real-valued, and noisy pattern representations. In comparisons with real-time recurrent learning, back propagation through time, recurrent cascade correlation, Elman nets, and neural sequence chunking, LSTM leads to many more successful runs, and learns much faster. LSTM also solves complex, artificial long-time-lag tasks that have never been solved by previous recurrent network algorithms.",
+        "title": "Long Short-Term Memory",
+        "citation": "Hochreiter and Schmidhuber, 1997"
+      }
+    ],
+    "llm_note": "LLM suggestion unavailable: GROQ_API_KEY is not configured in this process."
   },
   {
-    "citation": "Beltagy, 2019",
-    "status": "weak_support",
-    "similarity": 0.06,
-    "title": "A practical comparison between the spectral techniques in solving the SDEs",
-    "method": "embedding",
-    "source": "crossref",
-    "sentence": "SciBERT was pretrained on a large corpus of scientific text and improves performance on downstream scientific NLP tasks (Beltagy, 2019)."
+    "sentence": "Generative adversarial networks always produce realistic samples once the discriminator reaches 95% accuracy.",
+    "status": "uncited_claim",
+    "suggestions": [
+      {
+        "score": 0.17321676015853882,
+        "text": "Learning to store information over extended time intervals by recurrent backpropagation takes a very long time, mostly because of insufficient, decaying error backflow. We briefly review Hochreiter's (1991) analysis of this problem, then address it by introducing a novel, efficient, gradient based method called long short-term memory (LSTM). Truncating the gradient where this does not do harm, LSTM can learn to bridge minimal time lags in excess of 1000 discrete-time steps by enforcing constant error flow through constant error carousels within special units. Multiplicative gate units learn to open and close access to the constant error flow. LSTM is local in space and time; its computational complexity per time step and weight is O. 1. Our experiments with artificial data involve local, distributed, real-valued, and noisy pattern representations. In comparisons with real-time recurrent learning, back propagation through time, recurrent cascade correlation, Elman nets, and neural sequence chunking, LSTM leads to many more successful runs, and learns much faster. LSTM also solves complex, artificial long-time-lag tasks that have never been solved by previous recurrent network algorithms.",
+        "title": "Long Short-Term Memory",
+        "citation": "Hochreiter and Schmidhuber, 1997"
+      },
+      {
+        "score": 0.1700259894132614,
+        "text": "Obtaining large-scale annotated data for NLP tasks in the scientific domain is challenging and expensive. We release SciBERT, a pretrained language model based on BERT (Devlin et al., 2018) to address the lack of high-quality, large-scale labeled scientific data. SciBERT leverages unsupervised pretraining on a large multi-domain corpus of scientific publications to improve performance on downstream scientific NLP tasks. We evaluate on a suite of tasks including sequence tagging, sentence classification and dependency parsing, with datasets from a variety of scientific domains. We demonstrate statistically significant improvements over BERT and achieve new state-of-the-art results on several of these tasks. The code and pretrained models are available at https://github.com/allenai/scibert/.",
+        "title": "SciBERT: A Pretrained Language Model for Scientific Text",
+        "citation": "Beltagy et al., 2019"
+      }
+    ],
+    "llm_note": "LLM suggestion unavailable: GROQ_API_KEY is not configured in this process."
   },
   {
-    "citation": "Vaswani et al., 2017",
+    "sentence": "LSTM networks eliminate vanishing gradients and can always learn dependencies of arbitrary length.",
+    "status": "uncited_claim",
+    "suggestions": [
+      {
+        "score": 0.6124276518821716,
+        "text": "Learning to store information over extended time intervals by recurrent backpropagation takes a very long time, mostly because of insufficient, decaying error backflow. We briefly review Hochreiter's (1991) analysis of this problem, then address it by introducing a novel, efficient, gradient based method called long short-term memory (LSTM). Truncating the gradient where this does not do harm, LSTM can learn to bridge minimal time lags in excess of 1000 discrete-time steps by enforcing constant error flow through constant error carousels within special units. Multiplicative gate units learn to open and close access to the constant error flow. LSTM is local in space and time; its computational complexity per time step and weight is O. 1. Our experiments with artificial data involve local, distributed, real-valued, and noisy pattern representations. In comparisons with real-time recurrent learning, back propagation through time, recurrent cascade correlation, Elman nets, and neural sequence chunking, LSTM leads to many more successful runs, and learns much faster. LSTM also solves complex, artificial long-time-lag tasks that have never been solved by previous recurrent network algorithms.",
+        "title": "Long Short-Term Memory",
+        "citation": "Hochreiter and Schmidhuber, 1997"
+      },
+      {
+        "score": 0.2853696346282959,
+        "text": "Obtaining large-scale annotated data for NLP tasks in the scientific domain is challenging and expensive. We release SciBERT, a pretrained language model based on BERT (Devlin et al., 2018) to address the lack of high-quality, large-scale labeled scientific data. SciBERT leverages unsupervised pretraining on a large multi-domain corpus of scientific publications to improve performance on downstream scientific NLP tasks. We evaluate on a suite of tasks including sequence tagging, sentence classification and dependency parsing, with datasets from a variety of scientific domains. We demonstrate statistically significant improvements over BERT and achieve new state-of-the-art results on several of these tasks. The code and pretrained models are available at https://github.com/allenai/scibert/.",
+        "title": "SciBERT: A Pretrained Language Model for Scientific Text",
+        "citation": "Beltagy et al., 2019"
+      }
+    ],
+    "llm_note": "LLM suggestion unavailable: GROQ_API_KEY is not configured in this process."
+  },
+  {
+    "sentence": "Using a larger embedding dimension improves semantic retrieval accuracy on every dataset and for every query type.",
+    "status": "uncited_claim",
+    "suggestions": [
+      {
+        "score": 0.32011353969573975,
+        "text": "Obtaining large-scale annotated data for NLP tasks in the scientific domain is challenging and expensive. We release SciBERT, a pretrained language model based on BERT (Devlin et al., 2018) to address the lack of high-quality, large-scale labeled scientific data. SciBERT leverages unsupervised pretraining on a large multi-domain corpus of scientific publications to improve performance on downstream scientific NLP tasks. We evaluate on a suite of tasks including sequence tagging, sentence classification and dependency parsing, with datasets from a variety of scientific domains. We demonstrate statistically significant improvements over BERT and achieve new state-of-the-art results on several of these tasks. The code and pretrained models are available at https://github.com/allenai/scibert/.",
+        "title": "SciBERT: A Pretrained Language Model for Scientific Text",
+        "citation": "Beltagy et al., 2019"
+      },
+      {
+        "score": 0.15015651285648346,
+        "text": "Learning to store information over extended time intervals by recurrent backpropagation takes a very long time, mostly because of insufficient, decaying error backflow. We briefly review Hochreiter's (1991) analysis of this problem, then address it by introducing a novel, efficient, gradient based method called long short-term memory (LSTM). Truncating the gradient where this does not do harm, LSTM can learn to bridge minimal time lags in excess of 1000 discrete-time steps by enforcing constant error flow through constant error carousels within special units. Multiplicative gate units learn to open and close access to the constant error flow. LSTM is local in space and time; its computational complexity per time step and weight is O. 1. Our experiments with artificial data involve local, distributed, real-valued, and noisy pattern representations. In comparisons with real-time recurrent learning, back propagation through time, recurrent cascade correlation, Elman nets, and neural sequence chunking, LSTM leads to many more successful runs, and learns much faster. LSTM also solves complex, artificial long-time-lag tasks that have never been solved by previous recurrent network algorithms.",
+        "title": "Long Short-Term Memory",
+        "citation": "Hochreiter and Schmidhuber, 1997"
+      }
+    ],
+    "llm_note": "LLM suggestion unavailable: GROQ_API_KEY is not configured in this process."
+  },
+  {
+    "sentence": "Combining a pretrained language model with retrieved documents reduces factual errors by 80% in every application.",
+    "status": "uncited_claim",
+    "suggestions": [
+      {
+        "score": 0.39430946111679077,
+        "text": "Obtaining large-scale annotated data for NLP tasks in the scientific domain is challenging and expensive. We release SciBERT, a pretrained language model based on BERT (Devlin et al., 2018) to address the lack of high-quality, large-scale labeled scientific data. SciBERT leverages unsupervised pretraining on a large multi-domain corpus of scientific publications to improve performance on downstream scientific NLP tasks. We evaluate on a suite of tasks including sequence tagging, sentence classification and dependency parsing, with datasets from a variety of scientific domains. We demonstrate statistically significant improvements over BERT and achieve new state-of-the-art results on several of these tasks. The code and pretrained models are available at https://github.com/allenai/scibert/.",
+        "title": "SciBERT: A Pretrained Language Model for Scientific Text",
+        "citation": "Beltagy et al., 2019"
+      },
+      {
+        "score": 0.17219394445419312,
+        "text": "Learning to store information over extended time intervals by recurrent backpropagation takes a very long time, mostly because of insufficient, decaying error backflow. We briefly review Hochreiter's (1991) analysis of this problem, then address it by introducing a novel, efficient, gradient based method called long short-term memory (LSTM). Truncating the gradient where this does not do harm, LSTM can learn to bridge minimal time lags in excess of 1000 discrete-time steps by enforcing constant error flow through constant error carousels within special units. Multiplicative gate units learn to open and close access to the constant error flow. LSTM is local in space and time; its computational complexity per time step and weight is O. 1. Our experiments with artificial data involve local, distributed, real-valued, and noisy pattern representations. In comparisons with real-time recurrent learning, back propagation through time, recurrent cascade correlation, Elman nets, and neural sequence chunking, LSTM leads to many more successful runs, and learns much faster. LSTM also solves complex, artificial long-time-lag tasks that have never been solved by previous recurrent network algorithms.",
+        "title": "Long Short-Term Memory",
+        "citation": "Hochreiter and Schmidhuber, 1997"
+      }
+    ],
+    "llm_note": "LLM suggestion unavailable: GROQ_API_KEY is not configured in this process."
+  },
+  {
+    "sentence": "The proposed evidence-retrieval module always returns the correct supporting passage, even when the document collection contains contradictory sources.",
+    "status": "uncited_claim",
+    "suggestions": [
+      {
+        "score": 0.2707670331001282,
+        "text": "Obtaining large-scale annotated data for NLP tasks in the scientific domain is challenging and expensive. We release SciBERT, a pretrained language model based on BERT (Devlin et al., 2018) to address the lack of high-quality, large-scale labeled scientific data. SciBERT leverages unsupervised pretraining on a large multi-domain corpus of scientific publications to improve performance on downstream scientific NLP tasks. We evaluate on a suite of tasks including sequence tagging, sentence classification and dependency parsing, with datasets from a variety of scientific domains. We demonstrate statistically significant improvements over BERT and achieve new state-of-the-art results on several of these tasks. The code and pretrained models are available at https://github.com/allenai/scibert/.",
+        "title": "SciBERT: A Pretrained Language Model for Scientific Text",
+        "citation": "Beltagy et al., 2019"
+      },
+      {
+        "score": 0.12877491116523743,
+        "text": "Contemporary approaches to the digital transformation of practice in university research and teaching sometimes assume a convergence between the digital and openness. This assumption has led to the idea of \u2018digital open scholarship,\u2019 which aims to open up scholarship to participants from outside academic scholarly communities. But scholarship, digitality and openness exist in tension with each other \u2013 we can see the individual features of each, but we cannot make sense of the whole picture. It resembles an \u2018impossible triangle\u2019. Particularly confounding is the tension between digital scholarship and open knowledge, where the former is focused on the creation by specialist communities of knowledge of a stable and enduring kind, whilst the latter is characterised by encyclopaedic knowledge and participation that is unbounded by affiliation or location. However, we need not be permanently thwarted by the apparent impossibility of this triangle. It is a stimulus to look critically at the contexts of practice in which a relationship between scholarship, digitality and openness is sought. Constructive examples of such critique can be found in the emerging research field of literacy and knowledge practice in the digital university.Keywords: open scholarship, digital scholarship, research, public engagement, literacy, digital university(Published: 31 January 2014)Citation: Research in Learning Technology 2014, 21: 21366 - http://dx.doi.org/10.3402/rlt.v21.21366",
+        "title": "Scholarly, digital, open: an impossible triangle?",
+        "citation": "Goodfellow et al., 2014"
+      }
+    ],
+    "llm_note": "LLM suggestion unavailable: GROQ_API_KEY is not configured in this process."
+  },
+  {
+    "citation": "Goodfellow et al., 2014",
+    "title": "Scholarly, digital, open: an impossible triangle?",
+    "year": 2014,
+    "source": "crossref",
+    "sources": [
+      "crossref"
+    ],
+    "doi": "10.3402/rlt.v21.21366",
+    "url": "https://doi.org/10.3402/rlt.v21.21366",
+    "context_score": 0.2,
+    "status": "weak_support",
+    "similarity": -0.038,
+    "method": "embedding",
+    "note": "Embedding similarity is a fallback signal, not proof of factual support.",
+    "sentence": "Generative adversarial networks train a generator and discriminator in opposition through an adversarial learning objective (Goodfellow et al., 2014)."
+  },
+  {
+    "citation": "Kingma et al., 2014",
+    "title": "Maternal anxiety during pregnancy and the effects on the mother-child relationship in the early postnatal period",
+    "year": 2014,
+    "source": "openaire",
+    "sources": [
+      "openaire"
+    ],
+    "doi": null,
+    "url": "phd_tilb__nl::ef0967aaf6524903dd124000de53cf42",
+    "context_score": 0.083,
     "status": "exists_no_abstract",
-    "title": "A rewarding introduction to global bioethics",
-    "note": "A plausible paper record was found, but the available providers did not supply an abstract for support checking.",
+    "note": "A contextually plausible paper record was found, but metadata providers did not supply an abstract. Citation identity is not the same as claim verification.",
+    "sentence": "Adaptive moment estimation maintains moving averages of gradients and squared gradients to adapt parameter updates during training (Kingma et al., 2014)."
+  },
+  {
+    "citation": "Hochreiter and Schmidhuber, 1997",
+    "title": "Long Short-Term Memory",
+    "year": 1997,
     "source": "crossref",
-    "sentence": "Transformer based architectures have become the dominant approach for natural language processing tasks since their introduction (Vaswani et al., 2017)."
+    "sources": [
+      "crossref"
+    ],
+    "doi": "10.1162/neco.1997.9.8.1735",
+    "url": "https://doi.org/10.1162/neco.1997.9.8.1735",
+    "context_score": 0.545,
+    "status": "verified",
+    "similarity": 0.682,
+    "method": "embedding",
+    "note": "Embedding similarity is a fallback signal, not proof of factual support.",
+    "sentence": "Long short-term memory networks use gated mechanisms to manage information and learn temporal dependencies in recurrent neural networks (Hochreiter and Schmidhuber, 1997)."
+  },
+  {
+    "citation": "Beltagy et al., 2019",
+    "title": "SciBERT: A Pretrained Language Model for Scientific Text",
+    "year": 2019,
+    "source": "openalex",
+    "sources": [
+      "openalex"
+    ],
+    "doi": "https://doi.org/10.18653/v1/d19-1371",
+    "url": "https://doi.org/10.18653/v1/d19-1371",
+    "context_score": 0.556,
+    "status": "verified",
+    "similarity": 0.603,
+    "method": "embedding",
+    "note": "Embedding similarity is a fallback signal, not proof of factual support.",
+    "sentence": "SciBERT was pretrained on scientific publications to improve language representations for scientific text-processing tasks (Beltagy et al., 2019)."
   }
 ]

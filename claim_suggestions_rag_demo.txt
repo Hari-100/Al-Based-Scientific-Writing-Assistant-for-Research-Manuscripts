@@ -1,0 +1,23 @@
+CiteGuard Claim Suggestions and Evidence Retrieval Demo
+
+Adaptive moment estimation maintains moving averages of gradients and squared gradients to adapt parameter updates during training (Kingma et al., 2014).
+
+Generative adversarial networks train a generator and discriminator in opposition through an adversarial learning objective (Goodfellow et al., 2014).
+
+Long short-term memory networks use gated mechanisms to manage information and learn temporal dependencies in recurrent neural networks (Hochreiter and Schmidhuber, 1997).
+
+SciBERT was pretrained on scientific publications to improve language representations for scientific text-processing tasks (Beltagy et al., 2019).
+
+The Adam optimizer always achieves lower validation loss than stochastic gradient descent, regardless of architecture, dataset, or learning-rate schedule.
+
+Pretraining a scientific language model improves performance by at least 30% on every downstream scientific text-classification task.
+
+Generative adversarial networks always produce realistic samples once the discriminator reaches 95% accuracy.
+
+LSTM networks eliminate vanishing gradients and can always learn dependencies of arbitrary length.
+
+Using a larger embedding dimension improves semantic retrieval accuracy on every dataset and for every query type.
+
+Combining a pretrained language model with retrieved documents reduces factual errors by 80% in every application.
+
+The proposed evidence-retrieval module always returns the correct supporting passage, even when the document collection contains contradictory sources.

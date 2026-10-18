@@ -1,168 +1,245 @@
-"""Groq chat-completions client with empty-response and reasoning-budget handling."""
+"""Reliable Groq integration for CiteGuard.
+
+Loads the project-root .env file, checks for genuinely usable completions,
+falls through when a model returns empty content, and parses support judgments
+without assuming every response is perfectly formatted.
+"""
+
 import os
+import re
+from pathlib import Path
+from typing import Optional
+
 import requests
 
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+DOTENV_PATH = PROJECT_ROOT / ".env"
 GROQ_URL = "https://api.groq.com/openai/v1/chat/completions"
+
+# Try python-dotenv first. A tiny fallback loader keeps the app functional if
+# python-dotenv has not been installed yet. Existing process env vars take
+# precedence over .env values.
+try:
+    from dotenv import load_dotenv
+
+    load_dotenv(dotenv_path=DOTENV_PATH, override=False)
+except ImportError:
+    if DOTENV_PATH.is_file():
+        try:
+            for raw_line in DOTENV_PATH.read_text(encoding="utf-8-sig").splitlines():
+                line = raw_line.strip()
+                if not line or line.startswith("#"):
+                    continue
+                if line.startswith("export "):
+                    line = line[7:].strip()
+                if "=" not in line:
+                    continue
+                key, value = line.split("=", 1)
+                key = key.strip()
+                value = value.strip()
+                if value and value[0:1] in ("'", '"') and value[-1:] == value[0:1]:
+                    value = value[1:-1]
+                if key and key not in os.environ:
+                    os.environ[key] = value
+        except OSError as exc:
+            print(f"Could not read project .env file: {exc}")
+
+# The first model is fast. The next two are fallback options if the first
+# returns empty content or is unavailable to this account.
 MODEL_CANDIDATES = [
     "openai/gpt-oss-20b",
-    "openai/gpt-oss-120b",
     "qwen/qwen3.8-27b",
+    "openai/gpt-oss-120b",
 ]
+
 _working_model = None
+_CONNECT_TIMEOUT = 4
+_READ_TIMEOUT = 18
 
 
-def llm_available():
-    """Return whether an API key is configured, not whether the API is reachable."""
-    return bool(os.environ.get("GROQ_API_KEY", "").strip())
+def llm_available() -> bool:
+    """Return whether an API key is configured, not whether the API is live."""
+    return bool((os.environ.get("GROQ_API_KEY") or "").strip())
 
 
-def _content_to_text(content):
-    if isinstance(content, str):
-        return content.strip()
-    if isinstance(content, list):
-        # Accommodate APIs that return content as typed text segments.
-        parts = []
-        for item in content:
-            if isinstance(item, dict) and isinstance(item.get("text"), str):
-                parts.append(item["text"])
-        return "\n".join(parts).strip()
-    return ""
+def _model_order():
+    models = list(MODEL_CANDIDATES)
+    configured_model = (os.environ.get("GROQ_MODEL") or "").strip()
+    if configured_model:
+        models = [configured_model] + [m for m in models if m != configured_model]
+    if _working_model and _working_model in models:
+        models.remove(_working_model)
+        models.insert(0, _working_model)
+    return models
 
 
-def _chat(prompt, max_tokens=256):
-    """Call Groq and try the next model if a request fails or returns empty content."""
+def _payload_for_model(model_name, prompt, max_tokens):
+    system_message = (
+        "You are CiteGuard, an assistant for scientific manuscript review. "
+        "Follow the requested output format exactly. Be concise, evidence-based, "
+        "and do not invent paper details or evidence."
+    )
+    payload = {
+        "model": model_name,
+        "messages": [
+            {"role": "system", "content": system_message},
+            {"role": "user", "content": prompt},
+        ],
+        # Groq documents max_completion_tokens as the replacement for max_tokens.
+        "max_completion_tokens": max(256, int(max_tokens)),
+        "temperature": 0.1,
+    }
+
+    # Reasoning tokens can consume the completion budget before a visible final
+    # answer is produced. Set low effort for GPT-OSS; disable it for Qwen 3.8.
+    if model_name.startswith("openai/gpt-oss-"):
+        payload["reasoning_effort"] = "low"
+        payload["include_reasoning"] = False
+    elif model_name == "qwen/qwen3.8-27b":
+        payload["reasoning_effort"] = "none"
+
+    return payload
+
+
+def _chat(prompt, max_tokens=512) -> Optional[str]:
+    """Call Groq and return non-empty visible answer text, or None on failure.
+
+    Empty 200 responses are not considered success: the next configured model
+    is tried instead. API keys are never included in logs.
+    """
     global _working_model
 
-    api_key = os.environ.get("GROQ_API_KEY", "").strip()
+    api_key = (os.environ.get("GROQ_API_KEY") or "").strip()
     if not api_key:
+        print(
+            "Groq LLM is not configured. Expected GROQ_API_KEY in the process "
+            f"environment or {DOTENV_PATH}."
+        )
         return None
 
-    models = (
-        [_working_model] + [m for m in MODEL_CANDIDATES if m != _working_model]
-        if _working_model
-        else list(MODEL_CANDIDATES)
-    )
-
-    # GPT-OSS spends completion tokens on reasoning as well as the visible answer.
-    # A 100-120 token budget can be consumed before it emits message.content.
-    completion_budget = max(768, int(max_tokens) * 4)
     headers = {
         "Authorization": f"Bearer {api_key}",
         "Content-Type": "application/json",
     }
 
-    for model_name in models:
-        payload = {
-            "model": model_name,
-            "messages": [{"role": "user", "content": prompt}],
-            "max_completion_tokens": completion_budget,
-            "temperature": 0.2,
-            "stream": False,
-        }
-        if model_name.startswith("openai/gpt-oss-"):
-            payload["reasoning_effort"] = "low"
-            payload["reasoning_format"] = "hidden"
-        elif model_name.startswith("qwen/qwen3"):
-            payload["reasoning_effort"] = "none"
-
+    for model_name in _model_order():
+        payload = _payload_for_model(model_name, prompt, max_tokens)
         try:
             response = requests.post(
                 GROQ_URL,
                 headers=headers,
                 json=payload,
-                timeout=30,
+                timeout=(_CONNECT_TIMEOUT, _READ_TIMEOUT),
             )
+            if response.status_code in (401, 403):
+                print(
+                    f"Groq authentication/permission error ({response.status_code}); "
+                    "check that GROQ_API_KEY is valid and has model access."
+                )
+                return None
             response.raise_for_status()
             data = response.json()
             choices = data.get("choices") or []
             if not choices:
-                print(f"LLM returned no choices from {model_name}; trying fallback model.")
+                print(f"Groq returned no choices from {model_name}; trying fallback.")
                 continue
 
-            choice = choices[0]
+            choice = choices[0] or {}
             message = choice.get("message") or {}
-            content = _content_to_text(message.get("content"))
+            content = message.get("content")
+            if isinstance(content, list):
+                # Be tolerant of OpenAI-compatible APIs returning content parts.
+                content = " ".join(
+                    part.get("text", "")
+                    for part in content
+                    if isinstance(part, dict)
+                )
+            content = content.strip() if isinstance(content, str) else ""
+
             if not content:
-                finish_reason = choice.get("finish_reason", "unknown")
-                reasoning_chars = len(str(message.get("reasoning") or ""))
+                finish_reason = choice.get("finish_reason") or "unknown"
+                usage = data.get("usage") or {}
+                completion_tokens = usage.get("completion_tokens", "unknown")
                 print(
-                    f"LLM returned empty content from {model_name} "
-                    f"(finish_reason={finish_reason}, reasoning_chars={reasoning_chars}); "
-                    "trying fallback model."
+                    f"Groq returned empty visible content from {model_name} "
+                    f"(finish_reason={finish_reason}, completion_tokens={completion_tokens}); "
+                    "trying fallback."
                 )
                 continue
 
             _working_model = model_name
             return content
 
-        except (requests.RequestException, ValueError, KeyError, TypeError) as exc:
-            print(f"LLM call failed with {model_name}: {exc}; trying fallback model.")
+        except requests.HTTPError as exc:
+            response = exc.response
+            status = response.status_code if response is not None else "unknown"
+            body = ""
+            if response is not None:
+                body = (response.text or "")[:240].replace("\n", " ")
+            print(f"Groq request failed for {model_name} (HTTP {status}): {body}")
+        except (requests.Timeout, requests.ConnectionError) as exc:
+            print(f"Groq connection/timeout for {model_name}: {exc.__class__.__name__}; trying fallback.")
+        except (requests.RequestException, ValueError, TypeError, KeyError) as exc:
+            print(f"Groq response failed for {model_name}: {exc.__class__.__name__}; trying fallback.")
 
+    print("All configured Groq models failed or returned empty content.")
     return None
 
 
 def judge_support(sentence, abstract):
     prompt = (
-        "Decide whether the paper abstract provides evidence supporting the claim.\n"
-        "Reply with YES or NO as the first line, followed by one short reason. "
-        "Do not infer support from topic similarity alone. If the abstract does not "
-        "contain enough evidence, answer NO.\n\n"
-        f"Claim: {sentence}\n\n"
-        f"Paper abstract: {abstract}\n"
+        "Decide whether the paper abstract provides evidence that supports the "
+        "specific claim in the sentence. Topic similarity alone is not support. "
+        "If the abstract does not support the claim, answer NO. Do not use outside knowledge.\n\n"
+        f"CLAIM: {sentence}\n\n"
+        f"PAPER ABSTRACT: {abstract}\n\n"
+        "Output exactly two lines. First line: YES or NO. Second line: one concise reason."
     )
-    reply = _chat(prompt, max_tokens=180)
+    reply = _chat(prompt, max_tokens=768)
     if not reply:
-        return {
-            "supported": None,
-            "reason": "LLM unavailable or returned an empty response; embedding fallback used.",
-        }
+        return {"supported": None, "reason": "Groq returned no usable completion from the configured models."}
 
     lines = [line.strip() for line in reply.splitlines() if line.strip()]
     if not lines:
-        return {"supported": None, "reason": "LLM returned no parseable response."}
+        return {"supported": None, "reason": "Groq returned an empty response."}
 
-    first_line = lines[0].upper().strip(" .:*_`-\t")
-    if first_line.startswith("YES"):
-        supported = True
-    elif first_line.startswith("NO"):
-        supported = False
-    else:
-        # Handle a verdict that appears after a short prefix, without silently guessing.
-        normalized = " ".join(lines[0].upper().split())
-        if normalized.startswith("SUPPORTED"):
-            supported = True
-        elif normalized.startswith("NOT SUPPORTED") or normalized.startswith("UNSUPPORTED"):
-            supported = False
-        else:
-            return {
-                "supported": None,
-                "reason": f"LLM returned an unrecognized verdict: {lines[0]}",
-            }
+    # Accept plain YES/NO and common Markdown/bullet formatting, but never guess
+    # a verdict if the answer does not clearly begin with YES or NO.
+    first = re.sub(r"^[\s>*#`]+", "", lines[0]).strip()
+    verdict_match = re.match(r"^(YES|NO)\b", first, flags=re.IGNORECASE)
+    if not verdict_match:
+        return {
+            "supported": None,
+            "reason": f"Groq returned an unparseable verdict: {reply[:300]}",
+        }
 
-    reason = lines[1] if len(lines) > 1 else "No explanation supplied."
+    supported = verdict_match.group(1).upper() == "YES"
+    reason = " ".join(lines[1:]).strip() or first[len(verdict_match.group(1)):].strip(" :.-")
+    if not reason:
+        reason = "The model returned a verdict without an explanation."
     return {"supported": supported, "reason": reason}
 
 
 def suggest_for_claim(sentence, candidates):
     if not candidates:
-        return "No candidate papers were retrieved, so no source suggestion is available."
+        return "No candidate source abstracts were retrieved for this claim."
 
-    listed_items = []
-    for candidate in candidates:
-        title = str(candidate.get("title") or "Untitled paper")
-        text = str(candidate.get("text") or candidate.get("abstract") or "")
-        listed_items.append(f"- {title}: {text[:250]}")
-
-    prompt = (
-        "A manuscript sentence has no citation. Consider only the candidate papers below.\n"
-        "If one plausibly supports the sentence, name it and explain the connection in one sentence. "
-        "Do not claim that a paper supports the sentence based on its title alone. "
-        "If none is suitable, say that none of the candidates clearly supports it.\n\n"
-        f"Sentence: {sentence}\n\n"
-        "Candidate papers:\n"
-        + "\n".join(listed_items)
+    listed = "\n\n".join(
+        f"Candidate {i + 1}: {c.get('title', 'Untitled paper')}\n"
+        f"Abstract/excerpt: {str(c.get('text', c.get('abstract', '')) or '')[:700]}"
+        for i, c in enumerate(candidates[:4])
     )
-    reply = _chat(prompt, max_tokens=220)
-    if not reply:
-        return "No suggestion available: all configured LLM models failed or returned empty content."
-    return reply.strip()
+    prompt = (
+        "A scientific manuscript contains this uncited claim:\n"
+        f"{sentence}\n\n"
+        "Below are candidate scholarly sources retrieved by the system. Based only on "
+        "the supplied titles and excerpts, state whether one is genuinely relevant. "
+        "If a candidate is relevant, name it and explain the connection in one or two "
+        "sentences. If none provides adequate support, explicitly say that none is a "
+        "reliable match. Do not invent titles, abstracts, DOIs, or evidence.\n\n"
+        f"CANDIDATES:\n{listed}"
+    )
+    reply = _chat(prompt, max_tokens=640)
+    if reply:
+        return reply
+    return None

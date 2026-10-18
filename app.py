@@ -55,16 +55,29 @@ def render_finding(i, item, show_sentence=True):
             if item.get("doi"):
                 st.caption(f"DOI: {item['doi']}")
             if item.get("reason"):
-                st.caption(f"LLM reasoning: {item['reason']}")
+                st.info(f"🤖 **LLM reasoning**\n\n{item['reason']}")
             elif "similarity" in item:
-                st.caption(f"Embedding similarity: {item['similarity']}")
+                st.caption(
+                    f"Embedding similarity: {item['similarity']}"
+                )
             if item.get("note"):
                 st.caption(item["note"])
-        elif status in ("possible_mismatch", "unresolved", "exists_no_abstract"):
+        elif status == "exists_no_abstract":
+            st.warning("**Abstract unavailable. Support was not checked.**")
+
             if item.get("title"):
-                st.caption(f"Candidate title: {item['title']}")
-            box = st.warning if status == "exists_no_abstract" else st.error
-            box(item.get("note", ""))
+                st.write(
+                    f"Candidate record: **{item['title']}**"
+                )
+
+            st.caption(
+                "The candidate record has not been confirmed as "
+                "the cited paper. Check its title, author and year "
+                "before treating this citation as a match."
+            )
+
+        elif status in ("possible_mismatch", "unresolved"):
+            st.error(item.get("note", ""))
         elif status == "uncited_claim":
             st.warning("Factual or empirical claim without a citation.")
             if item.get("llm_note"):

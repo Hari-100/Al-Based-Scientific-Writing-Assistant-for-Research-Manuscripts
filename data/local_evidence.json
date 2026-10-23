@@ -1,0 +1,590 @@
+{
+  "library_name": "CiteGuard curated local evidence library",
+  "version": 1,
+  "description": "Curated paraphrased evidence notes based on linked scholarly papers. These are not verbatim abstracts and are intended for claim-suggestion RAG, not citation identity verification.",
+  "records": [
+    {
+      "id": "vaswani_2017_transformer",
+      "title": "Attention Is All You Need",
+      "citation": "Vaswani et al., 2017",
+      "authors": [
+        "Ashish Vaswani",
+        "Noam Shazeer",
+        "Niki Parmar",
+        "Jakob Uszkoreit",
+        "Llion Jones",
+        "Aidan N. Gomez",
+        "Lukasz Kaiser",
+        "Illia Polosukhin"
+      ],
+      "year": 2017,
+      "url": "https://arxiv.org/abs/1706.03762",
+      "topics": [
+        "transformer",
+        "self-attention",
+        "parallel sequence processing",
+        "machine translation"
+      ],
+      "summary": "Introduces the Transformer, an encoder-decoder architecture based on attention rather than recurrence or convolution. Self-attention relates tokens within a sequence and enables substantially more parallel computation during training than recurrent sequence processing."
+    },
+    {
+      "id": "devlin_2019_bert",
+      "title": "BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding",
+      "citation": "Devlin et al., 2019",
+      "authors": [
+        "Jacob Devlin",
+        "Ming-Wei Chang",
+        "Kenton Lee",
+        "Kristina Toutanova"
+      ],
+      "year": 2019,
+      "url": "https://aclanthology.org/N19-1423/",
+      "topics": [
+        "BERT",
+        "bidirectional pretraining",
+        "language representations",
+        "fine-tuning",
+        "NLP"
+      ],
+      "summary": "Introduces BERT, which pretrains deep bidirectional representations by conditioning on left and right context. The pretrained model can be fine-tuned for tasks such as question answering and language inference with a small task-specific output layer."
+    },
+    {
+      "id": "liu_2019_roberta",
+      "title": "RoBERTa: A Robustly Optimized BERT Pretraining Approach",
+      "citation": "Liu et al., 2019",
+      "authors": [
+        "Yinhan Liu",
+        "Myle Ott",
+        "Naman Goyal",
+        "Jingfei Du",
+        "Mandar Joshi",
+        "Danqi Chen",
+        "Omer Levy",
+        "Mike Lewis",
+        "Luke Zettlemoyer",
+        "Veselin Stoyanov"
+      ],
+      "year": 2019,
+      "url": "https://arxiv.org/abs/1907.11692",
+      "topics": [
+        "RoBERTa",
+        "BERT",
+        "pretraining",
+        "hyperparameters",
+        "training data"
+      ],
+      "summary": "Studies how training data size, optimization choices, and hyperparameters affect BERT-style pretraining. The authors report that BERT was undertrained under its original setup and show that careful optimization can improve downstream benchmark results."
+    },
+    {
+      "id": "beltagy_2019_scibert",
+      "title": "SciBERT: A Pretrained Language Model for Scientific Text",
+      "citation": "Beltagy et al., 2019",
+      "authors": [
+        "Iz Beltagy",
+        "Kyle Lo",
+        "Arman Cohan"
+      ],
+      "year": 2019,
+      "url": "https://arxiv.org/abs/1903.10676",
+      "topics": [
+        "SciBERT",
+        "scientific text",
+        "domain-specific pretraining",
+        "text classification",
+        "NLP"
+      ],
+      "summary": "Introduces SciBERT, pretrained on a large multi-domain corpus of scientific publications. Evaluation covers sequence tagging, sentence classification, and dependency parsing; the paper reports statistically significant improvements over BERT on several scientific NLP tasks, not a universal fixed percentage gain."
+    },
+    {
+      "id": "lewis_2020_rag",
+      "title": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
+      "citation": "Lewis et al., 2020",
+      "authors": [
+        "Patrick Lewis",
+        "Ethan Perez",
+        "Aleksandra Piktus",
+        "Fabio Petroni",
+        "Vladimir Karpukhin",
+        "Naman Goyal",
+        "Heinrich Kuttler",
+        "Mike Lewis",
+        "Wen-tau Yih",
+        "Tim Rocktaschel",
+        "Sebastian Riedel",
+        "Douwe Kiela"
+      ],
+      "year": 2020,
+      "url": "https://arxiv.org/abs/2005.11401",
+      "topics": [
+        "retrieval augmented generation",
+        "RAG",
+        "retrieval",
+        "generation",
+        "knowledge intensive NLP",
+        "factuality"
+      ],
+      "summary": "Combines a pretrained sequence-to-sequence generator with a dense retriever over an external document collection. The study evaluates knowledge-intensive NLP tasks and reports gains on selected benchmarks. Retrieval provides explicit supporting documents, but this does not establish that RAG eliminates hallucinations or reduces errors by a fixed percentage in every application."
+    },
+    {
+      "id": "brown_2020_gpt3",
+      "title": "Language Models are Few-Shot Learners",
+      "citation": "Brown et al., 2020",
+      "authors": [
+        "Tom B. Brown",
+        "Benjamin Mann",
+        "Nick Ryder",
+        "Melanie Subbiah",
+        "Jared Kaplan",
+        "Prafulla Dhariwal",
+        "Arvind Neelakantan",
+        "Pranav Shyam",
+        "Girish Sastry",
+        "Amanda Askell",
+        "et al."
+      ],
+      "year": 2020,
+      "url": "https://arxiv.org/abs/2005.14165",
+      "topics": [
+        "GPT-3",
+        "few-shot learning",
+        "in-context learning",
+        "large language models"
+      ],
+      "summary": "Evaluates GPT-3, a 175-billion-parameter autoregressive language model, in zero-shot, one-shot, and few-shot settings. Scaling improves performance on many studied tasks, while results vary by task and do not imply that large models are always correct."
+    },
+    {
+      "id": "raffel_2020_t5",
+      "title": "Exploring the Limits of Transfer Learning with a Unified Text-to-Text Transformer",
+      "citation": "Raffel et al., 2020",
+      "authors": [
+        "Colin Raffel",
+        "Noam Shazeer",
+        "Adam Roberts",
+        "Katherine Lee",
+        "Sharan Narang",
+        "Michael Matena",
+        "Yanqi Zhou",
+        "Wei Li",
+        "Peter J. Liu"
+      ],
+      "year": 2020,
+      "url": "https://arxiv.org/abs/1910.10683",
+      "topics": [
+        "T5",
+        "text-to-text",
+        "transfer learning",
+        "pretraining",
+        "NLP"
+      ],
+      "summary": "Presents T5, which casts a broad range of NLP tasks into a text-to-text format and studies transfer-learning choices including objectives, datasets, and scale. Its results show strong performance on evaluated benchmarks rather than universal superiority on all possible tasks."
+    },
+    {
+      "id": "yang_2019_xlnet",
+      "title": "XLNet: Generalized Autoregressive Pretraining for Language Understanding",
+      "citation": "Yang et al., 2019",
+      "authors": [
+        "Zhilin Yang",
+        "Zihang Dai",
+        "Yiming Yang",
+        "Jaime Carbonell",
+        "Ruslan Salakhutdinov",
+        "Quoc V. Le"
+      ],
+      "year": 2019,
+      "url": "https://arxiv.org/abs/1906.08237",
+      "topics": [
+        "XLNet",
+        "autoregressive pretraining",
+        "permutation language modeling",
+        "language understanding"
+      ],
+      "summary": "Introduces XLNet, using permutation language modeling to capture bidirectional context while retaining an autoregressive objective. The paper evaluates the approach on language-understanding benchmarks and compares it with prior pretrained models."
+    },
+    {
+      "id": "clark_2020_electra",
+      "title": "ELECTRA: Pre-training Text Encoders as Discriminators Rather Than Generators",
+      "citation": "Clark et al., 2020",
+      "authors": [
+        "Kevin Clark",
+        "Minh-Thang Luong",
+        "Quoc V. Le",
+        "Christopher D. Manning"
+      ],
+      "year": 2020,
+      "url": "https://arxiv.org/abs/2003.10555",
+      "topics": [
+        "ELECTRA",
+        "replaced token detection",
+        "pretraining",
+        "discriminator",
+        "NLP"
+      ],
+      "summary": "Proposes replaced-token detection: a model learns to identify tokens replaced by a small generator rather than predicting only masked tokens. The authors report improved compute efficiency and strong downstream results under their tested training settings."
+    },
+    {
+      "id": "he_2021_deberta",
+      "title": "DeBERTa: Decoding-enhanced BERT with Disentangled Attention",
+      "citation": "He et al., 2021",
+      "authors": [
+        "Pengcheng He",
+        "Xiaodong Liu",
+        "Jianfeng Gao",
+        "Weizhu Chen"
+      ],
+      "year": 2021,
+      "url": "https://arxiv.org/abs/2006.03654",
+      "topics": [
+        "DeBERTa",
+        "disentangled attention",
+        "position encoding",
+        "masked language modeling",
+        "NLP"
+      ],
+      "summary": "Introduces disentangled attention that represents content and position separately, together with an enhanced mask decoder. The paper reports improvements over comparison systems on several natural-language understanding and generation benchmarks."
+    },
+    {
+      "id": "dosovitskiy_2021_vit",
+      "title": "An Image Is Worth 16x16 Words: Transformers for Image Recognition at Scale",
+      "citation": "Dosovitskiy et al., 2021",
+      "authors": [
+        "Alexey Dosovitskiy",
+        "Lucas Beyer",
+        "Alexander Kolesnikov",
+        "et al."
+      ],
+      "year": 2021,
+      "url": "https://arxiv.org/abs/2010.11929",
+      "topics": [
+        "Vision Transformer",
+        "ViT",
+        "image patches",
+        "computer vision",
+        "image classification"
+      ],
+      "summary": "Applies a pure Transformer directly to sequences of image patches. With large-scale pretraining and transfer to image-recognition benchmarks, the Vision Transformer matches or outperforms leading convolutional networks in the studied settings."
+    },
+    {
+      "id": "he_2016_resnet",
+      "title": "Deep Residual Learning for Image Recognition",
+      "citation": "He et al., 2016",
+      "authors": [
+        "Kaiming He",
+        "Xiangyu Zhang",
+        "Shaoqing Ren",
+        "Jian Sun"
+      ],
+      "year": 2016,
+      "url": "https://arxiv.org/abs/1512.03385",
+      "topics": [
+        "ResNet",
+        "residual learning",
+        "skip connections",
+        "deep neural networks",
+        "image recognition"
+      ],
+      "summary": "Presents residual learning, where layers learn residual functions relative to their inputs, enabling the training of substantially deeper networks. The paper demonstrates results on image-recognition benchmarks; it does not imply deeper models always perform better in every setting."
+    },
+    {
+      "id": "krizhevsky_2012_alexnet",
+      "title": "ImageNet Classification with Deep Convolutional Neural Networks",
+      "citation": "Krizhevsky et al., 2012",
+      "authors": [
+        "Alex Krizhevsky",
+        "Ilya Sutskever",
+        "Geoffrey Hinton"
+      ],
+      "year": 2012,
+      "url": "https://papers.nips.cc/paper/2012/hash/c399862d3b9d6b76c8436e924a68c45b-Abstract.html",
+      "topics": [
+        "AlexNet",
+        "CNN",
+        "ImageNet",
+        "image classification",
+        "deep learning"
+      ],
+      "summary": "Trains a deep convolutional neural network on the ImageNet classification task. The reported model achieved substantially lower top-1 and top-5 error than the previous state of the art in that benchmark and helped establish deep CNNs for large-scale image recognition."
+    },
+    {
+      "id": "kingma_2014_adam",
+      "title": "Adam: A Method for Stochastic Optimization",
+      "citation": "Kingma et al., 2014",
+      "authors": [
+        "Diederik P. Kingma",
+        "Jimmy Ba"
+      ],
+      "year": 2014,
+      "url": "https://arxiv.org/abs/1412.6980",
+      "topics": [
+        "Adam optimizer",
+        "adaptive moments",
+        "stochastic optimization",
+        "SGD",
+        "gradient descent"
+      ],
+      "summary": "Introduces Adam, an optimizer using adaptive estimates of first and second moments of gradients. The paper reports favorable empirical results on evaluated problems, but does not establish that Adam achieves lower validation loss than SGD for every model, dataset, or learning-rate schedule."
+    },
+    {
+      "id": "mikolov_2013_word2vec",
+      "title": "Efficient Estimation of Word Representations in Vector Space",
+      "citation": "Mikolov et al., 2013",
+      "authors": [
+        "Tomas Mikolov",
+        "Kai Chen",
+        "Greg Corrado",
+        "Jeffrey Dean"
+      ],
+      "year": 2013,
+      "url": "https://arxiv.org/abs/1301.3781",
+      "topics": [
+        "word2vec",
+        "word embeddings",
+        "distributed representations",
+        "semantic similarity"
+      ],
+      "summary": "Introduces efficient architectures for learning continuous word vectors from large text collections. The paper evaluates vector quality on word-similarity and related tasks and reports useful semantic and syntactic representations with lower training cost."
+    },
+    {
+      "id": "hochreiter_1997_lstm",
+      "title": "Long Short-Term Memory",
+      "citation": "Hochreiter and Schmidhuber, 1997",
+      "authors": [
+        "Sepp Hochreiter",
+        "Jürgen Schmidhuber"
+      ],
+      "year": 1997,
+      "url": "https://doi.org/10.1162/neco.1997.9.8.1735",
+      "topics": [
+        "LSTM",
+        "vanishing gradients",
+        "recurrent neural networks",
+        "long-range dependencies",
+        "gating"
+      ],
+      "summary": "Introduces LSTM memory cells and constant-error-flow mechanisms designed to address decaying error signals and learn long time lags in recurrent networks. This supports the claim that LSTM was designed to mitigate the problem, not the stronger claim that it eliminates all vanishing gradients or always learns arbitrary-length dependencies."
+    },
+    {
+      "id": "goodfellow_2014_gan",
+      "title": "Generative Adversarial Nets",
+      "citation": "Goodfellow et al., 2014",
+      "authors": [
+        "Ian Goodfellow",
+        "Jean Pouget-Abadie",
+        "Mehdi Mirza",
+        "Bing Xu",
+        "David Warde-Farley",
+        "Sherjil Ozair",
+        "Aaron Courville",
+        "Yoshua Bengio"
+      ],
+      "year": 2014,
+      "url": "https://arxiv.org/abs/1406.2661",
+      "topics": [
+        "GAN",
+        "generator",
+        "discriminator",
+        "adversarial training",
+        "generative models"
+      ],
+      "summary": "Introduces a framework with a generator and discriminator trained through an adversarial minimax objective. The discriminator helps distinguish generated from real samples during training; discriminator accuracy alone is not a guarantee that generated samples are realistic or that training has converged well."
+    },
+    {
+      "id": "sutskever_2014_seq2seq",
+      "title": "Sequence to Sequence Learning with Neural Networks",
+      "citation": "Sutskever et al., 2014",
+      "authors": [
+        "Ilya Sutskever",
+        "Oriol Vinyals",
+        "Quoc V. Le"
+      ],
+      "year": 2014,
+      "url": "https://arxiv.org/abs/1409.3215",
+      "topics": [
+        "sequence-to-sequence",
+        "seq2seq",
+        "LSTM",
+        "machine translation",
+        "encoder-decoder"
+      ],
+      "summary": "Presents an end-to-end sequence-to-sequence approach with one multilayer LSTM encoding an input sequence and another decoding the output. Experiments on English-to-French translation show competitive results and the model handles the long sentences tested."
+    },
+    {
+      "id": "peters_2018_elmo",
+      "title": "Deep Contextualized Word Representations",
+      "citation": "Peters et al., 2018",
+      "authors": [
+        "Matthew E. Peters",
+        "Mark Neumann",
+        "Mohit Iyyer",
+        "Matt Gardner",
+        "Christopher Clark",
+        "Kenton Lee",
+        "Luke Zettlemoyer"
+      ],
+      "year": 2018,
+      "url": "https://arxiv.org/abs/1802.05365",
+      "topics": [
+        "ELMo",
+        "contextual embeddings",
+        "bidirectional language models",
+        "word representations",
+        "NLP"
+      ],
+      "summary": "Introduces ELMo contextual word representations derived from internal states of a deep bidirectional language model. The representations can be added to task-specific models and show gains on several evaluated language-understanding tasks."
+    },
+    {
+      "id": "bahdanau_2015_attention",
+      "title": "Neural Machine Translation by Jointly Learning to Align and Translate",
+      "citation": "Bahdanau et al., 2015",
+      "authors": [
+        "Dzmitry Bahdanau",
+        "Kyunghyun Cho",
+        "Yoshua Bengio"
+      ],
+      "year": 2015,
+      "url": "https://arxiv.org/abs/1409.0473",
+      "topics": [
+        "attention",
+        "neural machine translation",
+        "soft alignment",
+        "encoder-decoder"
+      ],
+      "summary": "Adds a differentiable attention mechanism that lets a translation decoder focus on relevant parts of a source sentence rather than relying on one fixed-length vector. The authors report competitive English-to-French translation results and interpretable soft alignments."
+    },
+    {
+      "id": "reimers_2019_sbert",
+      "title": "Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks",
+      "citation": "Reimers and Gurevych, 2019",
+      "authors": [
+        "Nils Reimers",
+        "Iryna Gurevych"
+      ],
+      "year": 2019,
+      "url": "https://aclanthology.org/D19-1410/",
+      "topics": [
+        "sentence embeddings",
+        "semantic retrieval",
+        "cosine similarity",
+        "vector search",
+        "embedding models"
+      ],
+      "summary": "Adapts BERT with siamese and triplet network structures to produce sentence embeddings that can be compared with cosine similarity. This makes large-scale semantic similarity search much more efficient than separately processing every sentence pair with BERT."
+    },
+    {
+      "id": "karpukhin_2020_dpr",
+      "title": "Dense Passage Retrieval for Open-Domain Question Answering",
+      "citation": "Karpukhin et al., 2020",
+      "authors": [
+        "Vladimir Karpukhin",
+        "Barlas Oguz",
+        "Sewon Min",
+        "Patrick Lewis",
+        "Ledell Wu",
+        "Sergey Edunov",
+        "Danqi Chen",
+        "Wen-tau Yih"
+      ],
+      "year": 2020,
+      "url": "https://aclanthology.org/2020.emnlp-main.550/",
+      "topics": [
+        "dense retrieval",
+        "passage retrieval",
+        "dual encoder",
+        "BM25",
+        "question answering"
+      ],
+      "summary": "Studies a dense dual-encoder retriever for open-domain question answering. On the datasets evaluated, the method improves top-20 passage retrieval accuracy over a strong BM25 baseline; those results are empirical findings on selected benchmarks, not a guarantee of superiority for every corpus or query type."
+    },
+    {
+      "id": "thakur_2021_beir",
+      "title": "BEIR: A Heterogeneous Benchmark for Zero-shot Evaluation of Information Retrieval Models",
+      "citation": "Thakur et al., 2021",
+      "authors": [
+        "Nandan Thakur",
+        "Nils Reimers",
+        "Andreas Rücklé",
+        "Abhishek Srivastava",
+        "Iryna Gurevych"
+      ],
+      "year": 2021,
+      "url": "https://arxiv.org/abs/2104.08663",
+      "topics": [
+        "information retrieval",
+        "BEIR",
+        "benchmark",
+        "dense retrieval",
+        "BM25",
+        "generalization"
+      ],
+      "summary": "Introduces a heterogeneous benchmark spanning 18 retrieval datasets and several retrieval model families. Results show that retrieval performance and generalization vary across settings; BM25 is a strong baseline, while neural ranking approaches can improve quality with trade-offs in computational cost."
+    },
+    {
+      "id": "guu_2020_realm",
+      "title": "Retrieval Augmented Language Model Pre-Training",
+      "citation": "Guu et al., 2020",
+      "authors": [
+        "Kelvin Guu",
+        "Kenton Lee",
+        "Zora Tung",
+        "Panupong Pasupat",
+        "Ming-Wei Chang"
+      ],
+      "year": 2020,
+      "url": "https://research.google/pubs/retrieval-augmented-language-model-pre-training/",
+      "topics": [
+        "REALM",
+        "retrieval-augmented pretraining",
+        "retriever",
+        "question answering",
+        "external knowledge"
+      ],
+      "summary": "Augments language-model pretraining with a learned retriever that accesses an external document corpus. The study evaluates open-domain question answering and reports improvements on the studied benchmarks, illustrating how retrieved knowledge can complement parametric model knowledge."
+    },
+    {
+      "id": "izacard_2021_fid",
+      "title": "Leveraging Passage Retrieval with Generative Models for Open Domain Question Answering",
+      "citation": "Izacard and Grave, 2021",
+      "authors": [
+        "Gautier Izacard",
+        "Edouard Grave"
+      ],
+      "year": 2021,
+      "url": "https://aclanthology.org/2021.eacl-main.74/",
+      "topics": [
+        "FiD",
+        "retrieval-augmented generation",
+        "passages",
+        "question answering",
+        "evidence aggregation"
+      ],
+      "summary": "Studies a sequence-to-sequence generator that reads multiple retrieved passages for open-domain question answering. Results on Natural Questions and TriviaQA improve when more passages are retrieved in the tested setting, suggesting that generators can aggregate complementary evidence. More retrieved passages do not guarantee correctness in every setting."
+    },
+    {
+      "id": "kusupati_2022_matryoshka",
+      "title": "Matryoshka Representation Learning",
+      "citation": "Kusupati et al., 2022",
+      "authors": [
+        "Aditya Kusupati",
+        "Gantavya Bhatt",
+        "Aniket Rege",
+        "Matthew Wallingford",
+        "Aditya Sinha",
+        "Vivek Ramanujan",
+        "William Howard-Snyder",
+        "Kaifeng Chen",
+        "Sham Kakade",
+        "Prateek Jain",
+        "Ali Farhadi"
+      ],
+      "year": 2022,
+      "url": "https://research.google/pubs/matryoshka-representation-learning/",
+      "topics": [
+        "embedding dimensions",
+        "representation learning",
+        "embedding compression",
+        "semantic retrieval",
+        "efficiency"
+      ],
+      "summary": "Proposes representations trained to retain useful information at multiple embedding dimensions. The work studies accuracy-efficiency trade-offs and reports that smaller truncated embeddings can retain strong performance for selected tasks. It does not support a universal rule that increasing embedding dimension always improves retrieval accuracy."
+    }
+  ]
+}

@@ -16,7 +16,7 @@
         "citation": "Beltagy et al., 2019"
       }
     ],
-    "llm_note": "None of the supplied candidates provide relevant support for the claim."
+    "llm_note": "**Candidate and title:**  \nCandidate 1: *Long Short-Term Memory*  \n\n**Classification:** NO SUPPORT  \n\n**Evidence from supplied text:** The abstract discusses LSTM architecture and training efficiency but contains no mention of Adam, stochastic gradient descent, or validation loss comparisons.  \n\n**Limitation:** The text does not address optimizer choice or performance metrics relevant to the claim.  \n\n**Overall recommendation:** This source does not support the claim.  \n\n---  \n\n**Candidate and title:**  \nCandidate 2: *SciBERT: A Pretrained Language Model for Scientific Text*  \n\n**Classification:** NO SUPPORT  \n\n**Evidence from supplied text:** The abstract describes pretraining and downstream task performance of SciBERT, with no reference to Adam, SGD, or validation loss comparisons.  \n\n**Limitation:** No discussion of optimizer behavior or comparative results.  \n\n**Overall recommendation:** This source does not support the claim.  \n\n---  \n\n**Conclusion:** None of the retrieved candidates provide evidence for the claim that Adam always achieves lower validation loss than SGD across all architectures, datasets, or learning\u2011rate schedules. No source directly supports the claim."
   },
   {
     "sentence": "Pretraining a scientific language model improves performance by at least 30% on every downstream scientific text-classification task.",
@@ -35,7 +35,7 @@
         "citation": "Hochreiter and Schmidhuber, 1997"
       }
     ],
-    "llm_note": "**Relevant source**\n\n- **Candidate 1: \u201cSciBERT: A Pretrained Language Model for Scientific Text\u201d** \u2013 The abstract states that SciBERT, a pretrained model, \u201cimproves performance on downstream scientific NLP tasks\u201d and reports statistically significant gains over BERT on a suite of tasks, directly supporting the claim that pretraining boosts performance on scientific text\u2011classification tasks.\n\n**Irrelevant source**\n\n- **Candidate 2: \u201cLong Short-Term Memory\u201d** \u2013 This paper discusses recurrent neural network architecture and training dynamics, with no mention of pretraining or performance on scientific text\u2011classification tasks."
+    "llm_note": "**Candidate 1: SciBERT: A Pretrained Language Model for Scientific Text**  \n**Classification:** PARTIAL SUPPORT  \n**Evidence from supplied text:** \u201cSciBERT leverages unsupervised pretraining on a large multi-domain corpus of scientific publications to improve performance on downstream scientific NLP tasks.\u201d  \n**Limitation:** The abstract does not quantify the improvement, does not specify a 30\u202f% threshold, nor does it claim the improvement applies to *every* downstream scientific text\u2011classification task.  \n**Overall recommendation:** The paper supports the general idea that pretraining can help, but it does not meet the claim\u2019s specific magnitude or universality.\n\n---\n\n**Candidate 2: Long Short-Term Memory**  \n**Classification:** NO SUPPORT  \n**Evidence from supplied text:** The abstract discusses LSTM\u2019s ability to learn long\u2011range dependencies in sequential data; it makes no mention of pretraining, scientific language models, or downstream text\u2011classification performance.  \n**Limitation:** The source is unrelated to the claim.  \n**Overall recommendation:** No evidence for the claim; the paper is irrelevant to the investigated statement."
   },
   {
     "sentence": "Generative adversarial networks always produce realistic samples once the discriminator reaches 95% accuracy.",
@@ -54,7 +54,7 @@
         "citation": "Beltagy et al., 2019"
       }
     ],
-    "llm_note": "None of the provided candidates offers reliable support for the claim that \u201cgenerative adversarial networks always produce realistic samples once the discriminator reaches 95% accuracy.\u201d The first candidate discusses LSTM architectures, and the second discusses a pretrained language model for scientific text; neither addresses GAN training dynamics or discriminator accuracy thresholds."
+    "llm_note": "**Candidate 1: Long Short-Term Memory**  \n**Classification:** NO SUPPORT  \n**Evidence from supplied text:** The abstract discusses LSTM architecture and training dynamics for recurrent neural networks; no mention of generative adversarial networks, discriminator accuracy, or sample realism.  \n**Limitation:** The paper does not address GANs or the relationship between discriminator performance and sample quality.  \n**Overall recommendation:** This source does not support the claim.\n\n**Candidate 2: SciBERT: A Pretrained Language Model for Scientific Text**  \n**Classification:** NO SUPPORT  \n**Evidence from supplied text:** The abstract describes a pretrained language model for scientific NLP tasks; there is no reference to generative adversarial networks, discriminator accuracy, or realistic sample generation.  \n**Limitation:** The paper is unrelated to GANs and provides no evidence concerning the claim.  \n**Overall recommendation:** This source does not support the claim."
   },
   {
     "sentence": "LSTM networks eliminate vanishing gradients and can always learn dependencies of arbitrary length.",
@@ -73,7 +73,7 @@
         "citation": "Beltagy et al., 2019"
       }
     ],
-    "llm_note": "**Relevant source**\n\n- **Candidate 1: \u201cLong Short\u2011Term Memory\u201d** \u2013 The abstract explicitly discusses how LSTM units \u201cenforce constant error flow through constant error carousels\u201d to address the vanishing\u2011gradient problem and states that LSTM can learn to bridge minimal time lags in excess of 1000 discrete\u2011time steps, i.e., dependencies of arbitrary length. This directly supports the claim that LSTM networks eliminate vanishing gradients and can learn long\u2011range dependencies.\n\n**Irrelevant source**\n\n- **Candidate 2: \u201cSciBERT: A Pretrained Language Model for Scientific Text\u201d** \u2013 This paper focuses on a BERT\u2011based language model for scientific NLP tasks and does not address LSTM networks, vanishing gradients, or sequence\u2011length learning."
+    "llm_note": "**Candidate and title:**  \nCandidate 1: *Long Short-Term Memory*  \n\n**Classification:**  \nPARTIAL SUPPORT  \n\n**Evidence from supplied text:**  \n> \u201c...addressing it by introducing a novel, efficient, gradient based method called long short\u2011term memory (LSTM). Truncating the gradient where this does not do harm, LSTM can learn to bridge minimal time lags in excess of 1000 discrete\u2011time steps by enforcing constant error flow through constant error carousels within special units.\u201d  \n\n**Limitation:**  \nThe abstract does not claim that LSTM *always* eliminates vanishing gradients or that it can learn dependencies of *arbitrary* length; it only demonstrates effectiveness over lags >1000 steps.  \n\n---\n\n**Candidate and title:**  \nCandidate 2: *SciBERT: A Pretrained Language Model for Scientific Text*  \n\n**Classification:**  \nNO SUPPORT  \n\n**Evidence from supplied text:**  \nThe abstract discusses a BERT\u2011based language model for scientific NLP tasks and does not mention LSTM, vanishing gradients, or sequence length capabilities.  \n\n**Limitation:**  \nNo relevant information regarding the claim is provided.  \n\n---\n\n**Overall recommendation:**  \nNo candidate provides full support for the claim that LSTM networks eliminate vanishing gradients and can always learn dependencies of arbitrary length. Candidate\u202f1 offers partial evidence of mitigating vanishing gradients over long sequences, but the claim\u2019s universal and arbitrary\u2011length aspects remain unsubstantiated. Candidate\u202f2 is unrelated."
   },
   {
     "sentence": "Using a larger embedding dimension improves semantic retrieval accuracy on every dataset and for every query type.",
@@ -92,7 +92,7 @@
         "citation": "Hochreiter and Schmidhuber, 1997"
       }
     ],
-    "llm_note": "None of the supplied candidates provide adequate support for the claim that increasing the embedding dimension improves semantic retrieval accuracy on every dataset and for every query type."
+    "llm_note": "**Candidate and title:**  \nCandidate 1: *SciBERT: A Pretrained Language Model for Scientific Text*  \n\n**Classification:** NO SUPPORT  \n\n**Evidence from supplied text:** The abstract discusses pretraining on scientific corpora and downstream task performance, but contains no mention of embedding dimension size or its effect on retrieval accuracy.  \n\n**Limitation:** The text does not address embedding dimensionality or semantic retrieval performance.  \n\n---\n\n**Candidate and title:**  \nCandidate 2: *Long Short-Term Memory*  \n\n**Classification:** NO SUPPORT  \n\n**Evidence from supplied text:** The abstract describes the LSTM architecture and training efficiency, with no reference to embedding dimensions or retrieval accuracy.  \n\n**Limitation:** No discussion of embedding size or its impact on semantic retrieval.  \n\n---\n\n**Overall recommendation:**  \nNeither candidate provides evidence relevant to the claim that larger embedding dimensions universally improve semantic retrieval accuracy. No source directly supports the claim; a search for studies that systematically vary embedding size and evaluate retrieval across datasets would be required."
   },
   {
     "sentence": "Combining a pretrained language model with retrieved documents reduces factual errors by 80% in every application.",
@@ -111,7 +111,7 @@
         "citation": "Hochreiter and Schmidhuber, 1997"
       }
     ],
-    "llm_note": "None of the supplied candidates provides adequate support for the claim. Candidate\u202f1 discusses a pretrained language model for scientific text but does not address retrieval or factual error reduction. Candidate\u202f2 describes an LSTM architecture and likewise offers no evidence related to combining pretrained models with retrieved documents or error rates."
+    "llm_note": "**Candidate and title:**  \nCandidate 1: *SciBERT: A Pretrained Language Model for Scientific Text*  \n\n**Classification:** NO SUPPORT  \n\n**Evidence from supplied text:** The abstract discusses pretraining on scientific corpora and downstream task performance, but contains no mention of retrieval\u2011augmented generation, factual error rates, or any quantitative claim about error reduction.  \n\n**Limitation:** The text does not address the claim\u2019s key elements (retrieval, factual errors, 80% reduction, universality).  \n\n---\n\n**Candidate and title:**  \nCandidate 2: *Long Short-Term Memory*  \n\n**Classification:** NO SUPPORT  \n\n**Evidence from supplied text:** The abstract describes the LSTM architecture and its ability to learn long\u2011range dependencies, but makes no reference to retrieval\u2011augmented language models, factual error rates, or any claim about error reduction.  \n\n**Limitation:** The source lacks any discussion of the claim\u2019s components (retrieval, factual errors, 80% reduction, universal applicability).  \n\n---\n\n**Overall recommendation:**  \nNeither candidate provides evidence that combining a pretrained language model with retrieved documents reduces factual errors by 80% in every application. No source directly supports the claim; a search for studies that evaluate retrieval\u2011augmented generation with quantitative error\u2011rate reductions is recommended."
   },
   {
     "sentence": "The proposed evidence-retrieval module always returns the correct supporting passage, even when the document collection contains contradictory sources.",
@@ -130,7 +130,7 @@
         "citation": "Goodfellow et al., 2014"
       }
     ],
-    "llm_note": "None of the supplied candidates provides adequate support for the claim that the evidence\u2011retrieval module always returns the correct supporting passage even when the document collection contains contradictory sources."
+    "llm_note": "**Candidate and title:**  \nCandidate 1: *SciBERT: A Pretrained Language Model for Scientific Text*\n\n**Classification:**  \nNO SUPPORT\n\n**Evidence from supplied text:**  \nThe abstract discusses pretraining and downstream task performance of SciBERT but contains no mention of an evidence\u2011retrieval module, its correctness, or handling contradictory sources.\n\n**Limitation:**  \nThe text does not address retrieval accuracy or contradictory evidence; thus it cannot support the claim.\n\n**Overall recommendation:**  \nNo support for the claim; the source is irrelevant to the assertion about retrieval module correctness."
   },
   {
     "citation": "Goodfellow et al., 2014",
@@ -175,7 +175,7 @@
     "url": "https://doi.org/10.1162/neco.1997.9.8.1735",
     "context_score": 0.545,
     "status": "verified",
-    "reason": "The abstract explicitly states that LSTM employs multiplicative gate units to control information flow, demonstrating its gated mechanism for managing temporal dependencies.",
+    "reason": "The abstract explicitly states that LSTM uses multiplicative gate units to control information flow, demonstrating gated mechanisms for managing data and learning long\u2011range temporal dependencies.",
     "method": "llm",
     "sentence": "Long short-term memory networks use gated mechanisms to manage information and learn temporal dependencies in recurrent neural networks (Hochreiter and Schmidhuber, 1997)."
   },
@@ -191,7 +191,7 @@
     "url": "https://doi.org/10.18653/v1/d19-1371",
     "context_score": 0.556,
     "status": "verified",
-    "reason": "The abstract states that SciBERT was pretrained on a large corpus of scientific publications and that this pretraining improves performance on downstream scientific NLP tasks.",
+    "reason": "The abstract states that SciBERT was pretrained on a large corpus of scientific publications, which supports the claim.",
     "method": "llm",
     "sentence": "SciBERT was pretrained on scientific publications to improve language representations for scientific text-processing tasks (Beltagy et al., 2019)."
   }

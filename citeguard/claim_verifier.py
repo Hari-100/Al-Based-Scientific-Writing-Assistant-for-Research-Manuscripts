@@ -19,6 +19,27 @@ CLAIM_PHRASES = (
 )
 
 
+
+
+def _deduplicate_suggestions(candidates):
+    """Keep the highest-ranked suggestion for each normalized paper title."""
+    unique = []
+    seen = set()
+    for candidate in candidates or []:
+        if not isinstance(candidate, dict):
+            continue
+        title = str(candidate.get("title") or "").strip().casefold()
+        key = re.sub(r"[^a-z0-9]+", "", title)
+        if not key:
+            body = str(candidate.get("text") or "").strip().casefold()
+            key = "text:" + re.sub(r"[^a-z0-9]+", "", body[:180])
+        if not key or key in seen:
+            continue
+        seen.add(key)
+        unique.append(candidate)
+    return unique
+
+
 def looks_like_claim(sentence):
     text = str(sentence or "").strip()
     lowered = text.lower()
@@ -43,7 +64,7 @@ def looks_like_claim(sentence):
     return False
 
 
-def check_claims(parsed_sentences, store, k=2):
+def check_claims(parsed_sentences, store, k=3):
     flagged = []
     for item in parsed_sentences:
         # The parser maps author-year and numeric citations before this stage.
@@ -53,7 +74,8 @@ def check_claims(parsed_sentences, store, k=2):
         if not looks_like_claim(sentence):
             continue
 
-        suggestions = store.search(sentence, k=k)
+        suggestions = store.search(sentence, k=max(k * 4, 12))
+        suggestions = _deduplicate_suggestions(suggestions)[:k]
         if not suggestions:
             llm_note = "No candidate papers were retrieved, so no source suggestion is available."
         elif not llm_available():
